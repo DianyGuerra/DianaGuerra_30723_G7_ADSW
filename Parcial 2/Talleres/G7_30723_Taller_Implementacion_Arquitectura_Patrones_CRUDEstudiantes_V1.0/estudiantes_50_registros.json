@@ -1,0 +1,252 @@
+[
+  {
+    "codigo": "100001",
+    "nombreCompleto": "Leonel Tipan",
+    "anios": 21
+  },
+  {
+    "codigo": "100002",
+    "nombreCompleto": "Alejandro Montufar",
+    "anios": 22
+  },
+  {
+    "codigo": "100003",
+    "nombreCompleto": "Yuliana Valencia",
+    "anios": 20
+  },
+  {
+    "codigo": "100004",
+    "nombreCompleto": "Cristian Lisintunia",
+    "anios": 23
+  },
+  {
+    "codigo": "100005",
+    "nombreCompleto": "Camila Andrade",
+    "anios": 19
+  },
+  {
+    "codigo": "100006",
+    "nombreCompleto": "Mateo Cevallos",
+    "anios": 21
+  },
+  {
+    "codigo": "100007",
+    "nombreCompleto": "Valentina Paredes",
+    "anios": 22
+  },
+  {
+    "codigo": "100008",
+    "nombreCompleto": "Daniel Morales",
+    "anios": 20
+  },
+  {
+    "codigo": "100009",
+    "nombreCompleto": "Sofia Herrera",
+    "anios": 24
+  },
+  {
+    "codigo": "100010",
+    "nombreCompleto": "Sebastian Romero",
+    "anios": 23
+  },
+  {
+    "codigo": "100011",
+    "nombreCompleto": "Isabella Torres",
+    "anios": 19
+  },
+  {
+    "codigo": "100012",
+    "nombreCompleto": "Nicolas Zambrano",
+    "anios": 21
+  },
+  {
+    "codigo": "100013",
+    "nombreCompleto": "Danna Rojas",
+    "anios": 22
+  },
+  {
+    "codigo": "100014",
+    "nombreCompleto": "Emilio Salazar",
+    "anios": 20
+  },
+  {
+    "codigo": "100015",
+    "nombreCompleto": "Martina Castillo",
+    "anios": 23
+  },
+  {
+    "codigo": "100016",
+    "nombreCompleto": "Joaquin Medina",
+    "anios": 24
+  },
+  {
+    "codigo": "100017",
+    "nombreCompleto": "Ariana Vega",
+    "anios": 19
+  },
+  {
+    "codigo": "100018",
+    "nombreCompleto": "Samuel Flores",
+    "anios": 22
+  },
+  {
+    "codigo": "100019",
+    "nombreCompleto": "Renata Molina",
+    "anios": 20
+  },
+  {
+    "codigo": "100020",
+    "nombreCompleto": "Gabriel Ortega",
+    "anios": 21
+  },
+  {
+    "codigo": "100021",
+    "nombreCompleto": "Paula Jimenez",
+    "anios": 23
+  },
+  {
+    "codigo": "100022",
+    "nombreCompleto": "David Carrillo",
+    "anios": 22
+  },
+  {
+    "codigo": "100023",
+    "nombreCompleto": "Luciana Reyes",
+    "anios": 19
+  },
+  {
+    "codigo": "100024",
+    "nombreCompleto": "Andres Guerrero",
+    "anios": 24
+  },
+  {
+    "codigo": "100025",
+    "nombreCompleto": "Victoria Espinosa",
+    "anios": 20
+  },
+  {
+    "codigo": "100026",
+    "nombreCompleto": "Martin Aguilar",
+    "anios": 21
+  },
+  {
+    "codigo": "100027",
+    "nombreCompleto": "Bianca Castro",
+    "anios": 22
+  },
+  {
+    "codigo": "100028",
+    "nombreCompleto": "Felipe Navarro",
+    "anios": 23
+  },
+  {
+    "codigo": "100029",
+    "nombreCompleto": "Carolina Mendez",
+    "anios": 20
+  },
+  {
+    "codigo": "100030",
+    "nombreCompleto": "Diego Ponce",
+    "anios": 24
+  },
+  {
+    "codigo": "100031",
+    "nombreCompleto": "Antonella Silva",
+    "anios": 19
+  },
+  {
+    "codigo": "100032",
+    "nombreCompleto": "Kevin Vera",
+    "anios": 21
+  },
+  {
+    "codigo": "100033",
+    "nombreCompleto": "Julieta Cardenas",
+    "anios": 22
+  },
+  {
+    "codigo": "100034",
+    "nombreCompleto": "Juan Esteban Lopez",
+    "anios": 23
+  },
+  {
+    "codigo": "100035",
+    "nombreCompleto": "Micaela Bravo",
+    "anios": 20
+  },
+  {
+    "codigo": "100036",
+    "nombreCompleto": "Santiago Hidalgo",
+    "anios": 24
+  },
+  {
+    "codigo": "100037",
+    "nombreCompleto": "Emilia Vargas",
+    "anios": 19
+  },
+  {
+    "codigo": "100038",
+    "nombreCompleto": "Adrian Calderon",
+    "anios": 21
+  },
+  {
+    "codigo": "100039",
+    "nombreCompleto": "Natalia Benitez",
+    "anios": 22
+  },
+  {
+    "codigo": "100040",
+    "nombreCompleto": "Tomás Villacis",
+    "anios": 23
+  },
+  {
+    "codigo": "100041",
+    "nombreCompleto": "Valeria Serrano",
+    "anios": 20
+  },
+  {
+    "codigo": "100042",
+    "nombreCompleto": "Miguel Angel Cruz",
+    "anios": 24
+  },
+  {
+    "codigo": "100043",
+    "nombreCompleto": "Salome Peña",
+    "anios": 19
+  },
+  {
+    "codigo": "100044",
+    "nombreCompleto": "Luis Fernando Mora",
+    "anios": 21
+  },
+  {
+    "codigo": "100045",
+    "nombreCompleto": "Romina Cordero",
+    "anios": 22
+  },
+  {
+    "codigo": "100046",
+    "nombreCompleto": "Carlos Andres Ibarra",
+    "anios": 23
+  },
+  {
+    "codigo": "100047",
+    "nombreCompleto": "Ana Paula Arias",
+    "anios": 20
+  },
+  {
+    "codigo": "100048",
+    "nombreCompleto": "Esteban Rivadeneira",
+    "anios": 24
+  },
+  {
+    "codigo": "100049",
+    "nombreCompleto": "Maria Jose Almeida",
+    "anios": 19
+  },
+  {
+    "codigo": "100050",
+    "nombreCompleto": "Pablo Enriquez",
+    "anios": 21
+  }
+]
