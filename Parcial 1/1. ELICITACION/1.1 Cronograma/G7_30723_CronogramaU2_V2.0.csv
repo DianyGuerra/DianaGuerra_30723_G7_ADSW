@@ -1,0 +1,246 @@
+﻿Nombre de tarea,Descripción,Documento,Estado,Estado del entregable,Fecha límite,Parcial,Prioridad,Responsable,Sprint
+Realizar la guía del proyecto,Llenar la plantilla proporcionada por la ingeniera.,Guía del proyecto (https://app.notion.com/p/Gu-a-del-proyecto-35c6ee15d52580758cd6e3a40b855159?pvs=21),Listo,Entregado,28/04/2026,Parcial 1,,Leonel Tipan,
+Realizar la guía gamificada 1 y 2 de FastKote,Llenar la plantilla proporcionada por la ingeniera.,Guía Gamificada FastKote 1 y 2 (https://app.notion.com/p/Gu-a-Gamificada-FastKote-1-y-2-35c6ee15d5258037bbe4f81fb663a244?pvs=21),Listo,En curso,06/05/2026,Parcial 1,,Diany Guerra,
+Exposición matriz IREB - 3 requisitos,,Matriz IREB - 3 requisitos (https://app.notion.com/p/Matriz-IREB-3-requisitos-34f6ee15d52580a8b178c22a4faf634d?pvs=21),Listo,Entregado,28/04/2026,Parcial 1,,"Leonel Tipan, Diany Guerra, Paul Moreno",
+Subir el SRS al repositorio,,SRS - IEEE 830 - FastKote (https://app.notion.com/p/SRS-IEEE-830-FastKote-34f6ee15d525802aa337da3eb355fd74?pvs=21),Listo,Entregado,09/04/2026,Parcial 1,,Diany Guerra,
+Documento con 3 tipos de sistemas y ejemplo,,Taller 1 - Tipos de sistemas (https://app.notion.com/p/Taller-1-Tipos-de-sistemas-34f6ee15d52580edb4c1dcfbc647f484?pvs=21),Listo,Entregado,09/04/2026,Parcial 1,,"Diany Guerra, Paul Moreno, Leonel Tipan",
+Guía gamificada - 25 min,,Taller 2 - Guía Gamificada (https://app.notion.com/p/Taller-2-Gu-a-Gamificada-34f6ee15d525803b9c6ec23694abe6be?pvs=21),Listo,Entregado,21/04/2026,Parcial 1,,"Diany Guerra, Paul Moreno, Leonel Tipan",
+Taller análisis CRUD estudiantes,,Taller análisis trazabilidad (https://app.notion.com/p/Taller-an-lisis-trazabilidad-3506ee15d52580bdb830cabb18119d12?pvs=21),Listo,Entregado,28/04/2026,Parcial 1,,Paul Moreno,
+Reestructurar GitHub,,,Listo,,15/05/2026,Parcial 1,,Diany Guerra,
+Planificación en Notion,,,Listo,,12/05/2026 → 14/05/2026,Parcial 1,,Diany Guerra,
+Asistente GEM,,,Listo,,11/05/2026 → 15/05/2026,Parcial 1,,Diany Guerra,
+Presentación del P.A.R.A,,,Listo,,12/05/2026 → 14/05/2026,Parcial 1,,"Diany Guerra, Paul Moreno, Leonel Tipan",
+Matriz IREB 3 requisitos,,,Sin empezar,,18/05/2026 → 19/06/2026,Parcial 2,,"Diany Guerra, Paul Moreno, Leonel Tipan",
+"Diagramas de análisis CU, clases, puente y secuencia - 3 requisitos",,,Sin empezar,,18/05/2026 → 19/06/2026,Parcial 2,,"Diany Guerra, Paul Moreno, Leonel Tipan",
+Presentación de 4 requisitos - Matriz IREB y diagramas de análisis,,,Sin empezar,,15/06/2026 → 24/06/2026,Parcial 2,,"Diany Guerra, Paul Moreno, Leonel Tipan",
+Matriz IREB - Todo el proyecto,,,Sin empezar,,22/06/2026 → 31/07/2026,Parcial 3,,"Diany Guerra, Paul Moreno, Leonel Tipan",
+"Diagramas de análisis CU, clases, puente y secuencia - Todo el proyecto",,,Sin empezar,,22/06/2026 → 31/07/2026,Parcial 3,,"Diany Guerra, Paul Moreno, Leonel Tipan",
+Presentación requisitos - Matriz IREB y diagramas de análisis (1),,,Sin empezar,,27/07/2026 → 05/08/2026,Parcial 3,,"Diany Guerra, Paul Moreno, Leonel Tipan",
+Prototipo del Sistema FastKote - 3 Requisitos,,,Sin empezar,,18/05/2026 → 19/06/2026,Parcial 2,,"Diany Guerra, Paul Moreno, Leonel Tipan",
+Prototipo del Sistema FastKote,,,Sin empezar,,22/06/2026 → 31/07/2026,Parcial 3,,"Diany Guerra, Paul Moreno, Leonel Tipan",
+"Actualizar análisis del diagrama de Casos de Uso para L0-03, L0-06 y L0-07",,,Sin empezar,,05/06/2026,Parcial 1,,Diany Guerra,
+Analizar requisito CU-SGC-L0-03 Administrar Cotizacion en Matriz IREB,,,Sin empezar,,31/05/2026,Parcial 1,,Diany Guerra,
+"Elaborar análisis del Diagrama de Clases para L0-03, L0-06 y L0-07",,,Sin empezar,,10/06/2026,Parcial 1,,Paul Moreno,
+Entregar backlog y evidencias del sprint en Notion,,,Sin empezar,,15/06/2026,Parcial 1,,Diany Guerra,
+"Elaborar análisis de Diagramas de Secuencia para L0-03, L0-06 y L0-07",,,Sin empezar,,11/06/2026,Parcial 1,,Diany Guerra,
+Corregir observaciones y preparar versión final del sprint,,,Sin empezar,,14/06/2026,Parcial 1,,"Diany Guerra, Paul Moreno, Leonel Tipan",
+Revisar e integrar la Matriz IREB de los 3 requisitos analizados,,,Sin empezar,,02/06/2026,Parcial 1,,"Diany Guerra, Paul Moreno, Leonel Tipan",
+Analizar requisito CU-SGC-L0-06 Administrar Catálogo de Insumos en Matriz IREB,,,Sin empezar,,31/05/2026,Parcial 1,,Leonel Tipan,
+Analizar requisito CU-SGC-L0-07 Administrar Paquetes en Matriz IREB,,,Sin empezar,,31/05/2026,Parcial 1,,Paul Moreno,
+"Validar trazabilidad entre Matriz IREB, CU, puente, clases y secuencia",,,Sin empezar,,13/06/2026,Parcial 1,,"Diany Guerra, Paul Moreno, Leonel Tipan",
+"Planificar sprint de análisis de los requisitos L0-03, L0-06 y L0-07",,,Sin empezar,,27/05/2026,Parcial 1,,"Diany Guerra, Paul Moreno, Leonel Tipan",
+"Elaborar análisis del Diagrama Puente para L0-03, L0-06 y L0-07",,,Sin empezar,,08/06/2026,Parcial 1,,Leonel Tipan,
+"Propuesta de patrones de diseño, nombre, descripción, esquema de arquitectura y razón del porqué",,,Sin empezar,,02/06/2026,,,"Diany Guerra, Paul Moreno, Leonel Tipan",
+"RF8,1 - Formulario de Edición de Personal","Como: Técnico
+Necesito: Desarrollar la interfaz para modificar los datos cargados del empleado.
+Notas: Actualización de la información del personal del staff.
+Fuente: GN7_Backlog_V0.2.xlsx, hoja Sprint0, Sprint 1 y Sprint 2, fila 27.",,Sin empezar,,12/05/2026,Parcial 1,Alta,Paul Moreno,Sprint 0
+RF7 - Crear Empleado,"Como: Admin. del Sistema
+Necesito: Registrar un nuevo trabajador en la plataforma.
+Así podré: Dar de alta al personal operativo y de sistema del negocio.
+Notas: Formulario de registro con la información básica del personal.
+Fuente: GN7_Backlog_V0.2.xlsx, hoja Sprint0, Sprint 1 y Sprint 2, fila 23.",,Sin empezar,,07/05/2026,Parcial 1,Alta,Leonel Tipan,Sprint 0
+RF1.1 - Maquetado de interfaz de Login,"Como: Usuario
+Necesito: Diseñar formulario con Usuario y Contraseña.
+Notas: Dimensiones de 402x460 píxeles. Icono de sobre para usuario y candado para clave con máscara. Botón ""Ingresar"" en negrita.
+Fuente: GN7_Backlog_V0.2.xlsx, hoja Sprint0, Sprint 1 y Sprint 2, fila 5.",,Sin empezar,,10/04/2026,Parcial 1,Alta,Leonel Tipan,Sprint 0
+"RF2,1 - Interfaz de Gestión y Filtrado","Como: Técnico
+Necesito: Construir panel de clientes con barra de búsqueda por nombre/cédula.
+Notas: Tabla detallada con: Nombre, Cédula/RUC, Correo Electrónico, Teléfono, Dirección y Estado. Incluye columna de acciones.
+Fuente: GN7_Backlog_V0.2.xlsx, hoja Sprint0, Sprint 1 y Sprint 2, fila 9.",,Sin empezar,,20/04/2026,Parcial 1,Alta,Diany Guerra,Sprint 0
+"RF7,1 - Formulario de Registro de Personal","Como: Técnico
+Necesito: Construir la interfaz de captura de datos del nuevo empleado.
+Notas: Formulario estructurado para el alta de trabajadores habilitados.
+Fuente: GN7_Backlog_V0.2.xlsx, hoja Sprint0, Sprint 1 y Sprint 2, fila 24.",,Sin empezar,,08/05/2026,Parcial 1,Alta,Paul Moreno,Sprint 0
+RF6 - Interfaz de Consulta de Empleados,"Como: Técnico
+Necesito: Diseñar la pantalla de visualización del personal.
+Así podré: Revisar de forma rápida los trabajadores activos.
+Notas: Formularios/tabla para la consulta y lectura de la plantilla de personal.
+Fuente: GN7_Backlog_V0.2.xlsx, hoja Sprint0, Sprint 1 y Sprint 2, fila 21.",,Sin empezar,,06/05/2026,Parcial 1,Alta,Paul Moreno,Sprint 0
+RF2 - Buscar Cliente,"Como: Admin. de Cotizaciones
+Necesito: Visualizar y filtrar el catálogo de clientes existentes.
+Así podré: Localizar rápidamente registros para el proceso de cotización.
+Notas: Panel principal con barra de navegación lateral que incluye ""Calendario"" y ""Administrar Clientes"".
+Fuente: GN7_Backlog_V0.2.xlsx, hoja Sprint0, Sprint 1 y Sprint 2, fila 8.",,Sin empezar,,17/04/2026,Parcial 1,Alta,Paul Moreno,Sprint 0
+"RF1,2 - Validación de credenciales","Como: Usuario
+Necesito: Validar los datos ingresados contra la base de datos.
+Notas: Redirecciona a la gestión de clientes tras éxito. Incluye bloqueo por intentos fallidos.
+Fuente: GN7_Backlog_V0.2.xlsx, hoja Sprint0, Sprint 1 y Sprint 2, fila 6.",,Sin empezar,,13/04/2026,Parcial 1,Alta,Leonel Tipan,Sprint 0
+"RF9,1 - Módulo de Gestión de Roles","Como: Técnico
+Necesito: Implementar la lógica de vinculación entre el empleado y su rol.
+Notas: Control de acceso basado en roles (Seguridad NF-003).
+Fuente: GN7_Backlog_V0.2.xlsx, hoja Sprint0, Sprint 1 y Sprint 2, fila 30.",,Sin empezar,,14/05/2026,Parcial 1,Alta,Diany Guerra,Sprint 0
+RF3 - Crear Cliente,"Como: Admin. de Cotizaciones
+Necesito: Registrar la información de los nuevos clientes.
+Así podré: Asegurar la disponibilidad de datos confiables para las cotizaciones.
+Notas: Botón destacado ""+ Registrar Cliente"". Cumplir con Ley Orgánica de Protección de Datos Personales (LOPDP) de Ecuador.
+Fuente: GN7_Backlog_V0.2.xlsx, hoja Sprint0, Sprint 1 y Sprint 2, fila 12.",,Sin empezar,,24/04/2026,Parcial 1,Alta,Leonel Tipan,Sprint 0
+RF9 - Asignar Roles a Empleado,"Como: Admin. del Sistema
+Necesito: Definir y asignar roles operativos y de sistema a cada empleado.
+Así podré: Estructurar las responsabilidades y permisos dentro del proceso.
+Notas: Los roles de sistema incluyen: Admin, Staff de eventos y Encargado de inventario.
+Fuente: GN7_Backlog_V0.2.xlsx, hoja Sprint0, Sprint 1 y Sprint 2, fila 29.",,Sin empezar,,13/05/2026,Parcial 1,Alta,Leonel Tipan,Sprint 0
+RF4 - Modificar Cliente,"Como: Admin. de Cotizaciones
+Necesito: Actualizar la información de los clientes del catálogo.
+Así podré: Mantener datos vigentes y corregir errores en los registros de clientes.
+Notas: Se dispara desde el icono de editar (lápiz) de la columna de acciones en la tabla principal.
+Fuente: GN7_Backlog_V0.2.xlsx, hoja Sprint0, Sprint 1 y Sprint 2, fila 15.",,Sin empezar,,29/04/2026,Parcial 1,Alta,Diany Guerra,Sprint 0
+RF5.1 - Modelo de Datos (Empleados),"Como: Técnico
+Necesito: Crear tablas para empleados, cargos y vinculación con roles.
+Notas: Estructurar entidad empleados y su relación con roles de sistema y operativos.
+Fuente: GN7_Backlog_V0.2.xlsx, hoja Sprint0, Sprint 1 y Sprint 2, fila 19.",,Sin empezar,,05/05/2026,Parcial 1,Alta,Diany Guerra,Sprint 0
+RF1 - Autenticar Usuario,"Como: Usuario
+Necesito: Ingresar al sistema mediante credenciales válidas.
+Así podré: Acceder únicamente a los módulos autorizados según mi rol.
+Notas: Interfaz gráfica base en SQL.
+Fuente: GN7_Backlog_V0.2.xlsx, hoja Sprint0, Sprint 1 y Sprint 2, fila 4.",,En curso,,10/04/2026,Parcial 1,Alta,Diany Guerra,Sprint 0
+"RF2,2 - Detalle de Cliente","Como: Usuario
+Necesito: Desplegar ventana emergente de solo lectura con información y estado.
+Notas: Ventana titulada ""Ver detalles del cliente"". Indicador visual de estado arriba a la derecha. Botones de cierre ""X"" y ""Cerrar"".
+Fuente: GN7_Backlog_V0.2.xlsx, hoja Sprint0, Sprint 1 y Sprint 2, fila 10.",,Sin empezar,,22/04/2026,Parcial 1,Media,Leonel Tipan,Sprint 0
+RF5 - Buscar e Historial de Empleados,"Como: Admin. del Sistema
+Necesito: Consultar la lista del personal y sus roles asignados.
+Así podré: Visualizar la plantilla de trabajadores habilitados en el negocio.
+Notas: Mantenimiento y visualización del staff del negocio. Base de datos normalizada.
+Fuente: GN7_Backlog_V0.2.xlsx, hoja Sprint0, Sprint 1 y Sprint 2, fila 18.",,Sin empezar,,04/05/2026,Parcial 1,Alta,Leonel Tipan,Sprint 0
+"RF3,1 - Formulario de Registro","Como: Técnico
+Necesito: Crear modal con campos obligatorios para capturar la información del cliente.
+Notas: Campos obligatorios: Nombre, Cédula/RUC, Correo, Celular y Dirección. Botón de cierre (X) y botón ""Guardar"" o similar. + 1
+Fuente: GN7_Backlog_V0.2.xlsx, hoja Sprint0, Sprint 1 y Sprint 2, fila 13.",,Sin empezar,,27/04/2026,Parcial 1,Alta,Diany Guerra,Sprint 0
+RF8 - Modificar Empleado,"Como: Admin. del Sistema
+Necesito: Editar la información de los trabajadores existentes.
+Así podré: Mantener actualizada la ficha del personal del negocio.
+Notas: Formulario para la actualización de datos maestros del empleado.
+Fuente: GN7_Backlog_V0.2.xlsx, hoja Sprint0, Sprint 1 y Sprint 2, fila 26.",,Sin empezar,,11/05/2026,Parcial 1,Alta,Diany Guerra,Sprint 0
+"RF4,1 - Formulario de Edición","Como: Técnico
+Necesito: Reutilizar el formulario modal cargando los datos previos del cliente.
+Notas: Ventana titulada ""Actualizar datos del cliente"". Mismos campos obligatorios. Botón inferior ""Guardar cambios"".
+Fuente: GN7_Backlog_V0.2.xlsx, hoja Sprint0, Sprint 1 y Sprint 2, fila 16.",,Sin empezar,,01/05/2026,Parcial 1,Alta,Paul Moreno,Sprint 0
+RF10 - Desactivar Empleado,"Como: Admin. del Sistema
+Necesito: Dar de baja o desactivar a un empleado del sistema.
+Así podré: Restringir el acceso a la plataforma al personal no activo.
+Notas: Eliminación lógica o desactivación del personal dentro de la plantilla.
+Fuente: GN7_Backlog_V0.2.xlsx, hoja Sprint0, Sprint 1 y Sprint 2, fila 32.",,Sin empezar,,15/05/2026,Parcial 1,Alta,Paul Moreno,Sprint 0
+"RF11,1 - Interfaz de Filtros e Historial","Como: Técnico
+Necesito: Aplicar filtros (Cliente, Estado, Fechas) en la tabla de cotizaciones.
+Notas: Tabla con columnas: Código, Cliente, Fecha Evento, Versión, Estado y Monto Total. Incluye iconos de acciones rápidas. Selector de calendario.
+Fuente: GN7_Backlog_V0.2.xlsx, hoja Sprint0, Sprint 1 y Sprint 2, fila 38.",,Sin empezar,,14/06/2026,Parcial 2,Alta,Leonel Tipan,Sprint 1
+"RF17,1 - Interfaz de Detalle Financiero y Operativo","Como: Técnico
+Necesito: Diseñar una ventana modal de consulta de solo lectura para los paquetes.
+Notas: Debe mostrar: datos generales (nombre y descripción comercial), desglose ítem por ítem con costos individuales, y un panel de indicadores financieros (costo total, margen de ganancia y precio final de venta). Botón ""Cerrar"".
+Fuente: GN7_Backlog_V0.2.xlsx, hoja Sprint0, Sprint 1 y Sprint 2, fila 60.",,Sin empezar,,15/06/2026,Parcial 2,Media,Leonel Tipan,Sprint 1
+"RF14,1 - Bloqueo/Liberación de Agenda","Como: Técnico
+Necesito: Lógica para congelar o liberar la fecha del evento según el estado elegido.
+Notas: Aceptada confirma y bloquea automáticamente la fecha; rechazo o vencimiento la libera.
+Fuente: GN7_Backlog_V0.2.xlsx, hoja Sprint0, Sprint 1 y Sprint 2, fila 47.",,Listo,,14/06/2026,Parcial 2,Alta,Diany Guerra,Sprint 1
+RF13 - Modificar Cotización,"Como: Admin. de Cotizaciones
+Necesito: Ajustar manualmente los elementos de una cotización en estado borrador.
+Así podré: Personalizar los rubros comerciales alineados a la necesidad del cliente.
+Notas: Se realiza desde la pantalla ""Personalizar Cotización"" mediante tabla de edición.
+Fuente: GN7_Backlog_V0.2.xlsx, hoja Sprint0, Sprint 1 y Sprint 2, fila 43.",,Sin empezar,,14/06/2026,Parcial 2,Alta,Leonel Tipan,Sprint 1
+"RF15,3 - Inclusión de Cláusulas Legales","Como: Técnico
+Necesito: Incrustar en el pie de página del PDF las condiciones legales obligatorias.
+Notas: Especificar tiempo de validez de precios (15 días) y advertir que no constituye factura legal.
+Fuente: GN7_Backlog_V0.2.xlsx, hoja Sprint0, Sprint 1 y Sprint 2, fila 51.",,Sin empezar,,14/06/2026,Parcial 2,Alta,Diany Guerra,Sprint 1
+"RF15,2 - Integración con API WhatsApp","Como: Técnico
+Necesito: Conectar el sistema con el servicio de mensajería externo.
+Notas: Dependencia de terceros: notificar que la entrega exitosa depende de la disponibilidad del servicio.
+Fuente: GN7_Backlog_V0.2.xlsx, hoja Sprint0, Sprint 1 y Sprint 2, fila 50.",,En curso,,14/06/2026,Parcial 2,Alta,Paul Moreno,Sprint 1
+RF17 - Buscar y Visualizar Paquetes,"Como: Admin. del Sistema
+Necesito: Consultar el catálogo de paquetes comerciales disponibles.
+Así podré: Estructurar y revisar la oferta base para las cotizaciones.
+Notas: La pantalla final debe estructurar la información en tres secciones UI (datos generales, desglose de ítems e indicadores financieros).
+Fuente: GN7_Backlog_V0.2.xlsx, hoja Sprint0, Sprint 1 y Sprint 2, fila 59.",,Sin empezar,,15/06/2026,Parcial 2,Alta,Paul Moreno,Sprint 1
+"RF18,2 - Buscador Integrado de Servicios","Como: Técnico
+Necesito: Desarrollar un componente de búsqueda dentro del formulario de creación.
+Notas: Permite filtrar ítems del catálogo y mostrarlos en una lista dinámica con opción de eliminación directa antes de guardar.
+Fuente: GN7_Backlog_V0.2.xlsx, hoja Sprint0, Sprint 1 y Sprint 2, fila 63.",,Sin empezar,,15/06/2026,Parcial 2,Alta,Leonel Tipan,Sprint 1
+"RF19,1 - Formulario de Edición de Paquete","Como: Técnico
+Necesito: Programar la interfaz modal para editar los campos clave del paquete.
+Notas: Precarga obligatoria de los campos: nombre, descripción comercial y margen de ganancia para su edición directa. Botones de cancelar o guardar cambios.
+Fuente: GN7_Backlog_V0.2.xlsx, hoja Sprint0, Sprint 1 y Sprint 2, fila 66.",,Sin empezar,,15/06/2026,Parcial 2,Alta,Diany Guerra,Sprint 1
+RF19 - Modificar Paquete,"Como: Admin. del Sistema
+Necesito: Modificar los datos comerciales y de margen de un paquete existente.
+Así podré: Mantener la oferta de paquetes comerciales actualizada según las necesidades del negocio.
+Notas: Ventana modal que precarga la información del registro seleccionado.
+Fuente: GN7_Backlog_V0.2.xlsx, hoja Sprint0, Sprint 1 y Sprint 2, fila 65.",,Sin empezar,,15/06/2026,Parcial 2,Alta,Paul Moreno,Sprint 1
+RF11 - Buscar y Filtrar Cotizaciones,"Como: Admin. de Cotizaciones
+Necesito: Visualizar el historial y estado de las propuestas generadas.
+Así podré: Realizar el seguimiento centralizado de las propuestas comerciales.
+Notas: Filtros integrados por Cliente, Estado y Rango de Fechas.
+Fuente: GN7_Backlog_V0.2.xlsx, hoja Sprint0, Sprint 1 y Sprint 2, fila 37.",,Sin empezar,,14/06/2026,Parcial 2,Alta,Paul Moreno,Sprint 1
+"RF16,1 - Registrar Nuevo Insumo","Necesito: Formulario con nombre y unidad de medida.
+Notas: Marcas opcionales.
+Fuente: GN7_Backlog_V0.2.xlsx, hoja Sprint0, Sprint 1 y Sprint 2, fila 55.",,Sin empezar,,15/06/2026,Parcial 2,Alta,Leonel Tipan,Sprint 1
+"RF12,2 - Selección y Fijado de Fecha","Como: Técnico
+Necesito: Integrar el selector de calendario para la fecha tentativa del evento.
+Notas: Selección obligatoria de la fecha del evento asociada a la cotización.
+Fuente: GN7_Backlog_V0.2.xlsx, hoja Sprint0, Sprint 1 y Sprint 2, fila 42.",,Sin empezar,,14/06/2026,Parcial 2,Alta,Paul Moreno,Sprint 1
+"RF13,1 - Cálculo de Valores y Edición de Rubros","Como: Técnico
+Necesito: Ajustar rubros, cantidades y calcular subtotales e IVA automáticamente.
+Notas: Recálculo automático de subtotales e impuestos en la sección inferior. Panel lateral con buscador de catálogo.
+Fuente: GN7_Backlog_V0.2.xlsx, hoja Sprint0, Sprint 1 y Sprint 2, fila 44.",,Sin empezar,,14/06/2026,Parcial 2,Alta,Diany Guerra,Sprint 1
+FR20 - Gestionar Contenido de Paquete,"Como: Admin. del Sistema
+Necesito: Asignar o remover servicios y productos específicos de un paquete indicando cantidades.
+Así podré: Definir con exactitud la composición técnica e ítems vinculados a la oferta.
+Notas: Se dispara como una ventana de gestión modal independiente desde el catálogo de paquetes.
+Fuente: GN7_Backlog_V0.2.xlsx, hoja Sprint0, Sprint 1 y Sprint 2, fila 67.",,Sin empezar,,15/06/2026,Parcial 2,Alta,Leonel Tipan,Sprint 1
+"RF12,1 - Wizard de Generación (Pasos 1 y 2)","Como: Técnico
+Necesito: Crear un proceso secuencial de 4 pasos.
+Notas: Paso 1: Selector desplegable para clientes existentes y acceso rápido para registrar nuevo cliente. Paso 2: Selección de paquete base.
+Fuente: GN7_Backlog_V0.2.xlsx, hoja Sprint0, Sprint 1 y Sprint 2, fila 41.",,Sin empezar,,14/06/2026,Parcial 2,Alta,Leonel Tipan,Sprint 1
+"RF11,2 - Consultar Calendario de Eventos","Como: Usuario
+Necesito: Consultar la disponibilidad de fechas en un calendario.
+Notas: Pantalla de consulta de la agenda comercial vinculada a la barra lateral.
+Fuente: GN7_Backlog_V0.2.xlsx, hoja Sprint0, Sprint 1 y Sprint 2, fila 39.",,Sin empezar,,14/06/2026,Parcial 2,Media,Diany Guerra,Sprint 1
+"RF13,2 - Implementación de Autoguardado","Como: Técnico
+Necesito: Programar la persistencia automática en segundo plano cada 60 segundos.
+Notas: Criterio de Fiabilidad (NF-004) y Mantenibilidad (NF-004/RNF-008).
+Fuente: GN7_Backlog_V0.2.xlsx, hoja Sprint0, Sprint 1 y Sprint 2, fila 45.",,Sin empezar,,14/06/2026,Parcial 2,Alta,Paul Moreno,Sprint 1
+"RF15,1 - Generar PDF de Cotización","Como: Técnico
+Necesito: Exportar la propuesta a un documento PDF inalterable.
+Notas: Debe incluir logotipo, colores corporativos y eslogan de ""Chichi Está de Fiesta"". Idioma exclusivamente en español.
+Fuente: GN7_Backlog_V0.2.xlsx, hoja Sprint0, Sprint 1 y Sprint 2, fila 49.",,Sin empezar,,14/06/2026,Parcial 2,Alta,Diany Guerra,Sprint 1
+RF18 - Crear Paquete,"Como: Admin. del Sistema
+Necesito: Configurar combinaciones predefinidas de productos y servicios.
+Así podré: Estructurar la oferta comercial base del negocio de catering.
+Notas: Formulario modal de registro que conecta con el catálogo comercial.
+Fuente: GN7_Backlog_V0.2.xlsx, hoja Sprint0, Sprint 1 y Sprint 2, fila 61.",,Sin empezar,,15/06/2026,Parcial 2,Alta,Diany Guerra,Sprint 1
+"RF18,1 - Formulario de Registro de Paquete","Como: Técnico
+Necesito: Construir una interfaz modal para ingresar los datos del nuevo paquete.
+Notas: Requiere el ingreso obligatorio de: nombre, descripción detallada y el margen de ganancia esperado. Botones para cancelar o guardar.
+Fuente: GN7_Backlog_V0.2.xlsx, hoja Sprint0, Sprint 1 y Sprint 2, fila 62.",,Sin empezar,,15/06/2026,Parcial 2,Alta,Paul Moreno,Sprint 1
+RF16 - Catálogo de Insumos,"Como: Encargado de Inventario
+Necesito: Mantener un registro actualizado de materia prima y costos.
+Así podré: Utilizarlo como referencia para el cálculo de costos y recetas.
+Fuente: GN7_Backlog_V0.2.xlsx, hoja Sprint0, Sprint 1 y Sprint 2, fila 53.",,Sin empezar,,15/06/2026,Parcial 2,Alta,Leonel Tipan,Sprint 1
+"RF20,1 - Vinculación y Ajuste de Ítems","Como: Técnico
+Necesito: Construir la interfaz de asignación con un buscador de productos y un campo numérico de cantidad.
+Notas: Debe incluir un botón dedicado para ""Vincular al Paquete"" y opciones de borrado o eliminación individual en el listado de servicios vinculados.
+Fuente: GN7_Backlog_V0.2.xlsx, hoja Sprint0, Sprint 1 y Sprint 2, fila 68.",,Sin empezar,,15/06/2026,Parcial 2,Alta,Diany Guerra,Sprint 1
+RF12 - Crear Cotización,"Como: Admin. de Cotizaciones
+Necesito: Generar una nueva propuesta comercial de eventos.
+Así podré: Automatizar el proceso emitiendo cotizaciones claras y consistentes.
+Notas: Guía secuencial a través de un asistente o Wizard de 4 pasos.
+Fuente: GN7_Backlog_V0.2.xlsx, hoja Sprint0, Sprint 1 y Sprint 2, fila 40.",,Sin empezar,,14/06/2026,Parcial 2,Alta,Diany Guerra,Sprint 1
+RF15 - Exportar y Enviar Cotización,"Como: Admin. de Cotizaciones
+Necesito: Emitir el documento formal final y despacharlo al cliente.
+Así podré: Entregar la propuesta económica al cliente a través de canales digitales.
+Notas: Generación en formato PDF estándar y envío directo por la API de WhatsApp.
+Fuente: GN7_Backlog_V0.2.xlsx, hoja Sprint0, Sprint 1 y Sprint 2, fila 48.",,Sin empezar,,14/06/2026,Parcial 2,Alta,Leonel Tipan,Sprint 1
+RF14 - Actualizar Estado de Cotización,"Como: Admin. de Cotizaciones
+Necesito: Cambiar el estado comercial de la propuesta mediante una ventana modal.
+Así podré: Controlar el flujo del proceso y la reserva automatizada de la agenda.
+Notas: Ventana modal ""Actualizar Estado de Cotización"" con menú desplegable.
+Fuente: GN7_Backlog_V0.2.xlsx, hoja Sprint0, Sprint 1 y Sprint 2, fila 46.",,Sin empezar,,14/06/2026,Parcial 2,Alta,Paul Moreno,Sprint 1
+RF21 - Desactivar Paquete,"Como: Admin. del Sistema
+Necesito: Dar de baja o desactivar un paquete comercial del catálogo.
+Así podré: Evitar que se sigan generando cotizaciones basadas en paquetes obsoletos o descontinuados.
+Notas: Eliminación lógica o cambio de estado dentro del catálogo de ofertas base.
+Fuente: GN7_Backlog_V0.2.xlsx, hoja Sprint0, Sprint 1 y Sprint 2, fila 69.",,Sin empezar,,15/06/2026,Parcial 2,Alta,Paul Moreno,Sprint 1
+"RF16,2 - Actualizar Costo de Insumo","Necesito: Ventana que reciba el nuevo costo unitario.
+Notas: Visualizar costo anterior.
+Fuente: GN7_Backlog_V0.2.xlsx, hoja Sprint0, Sprint 1 y Sprint 2, fila 56.",,Sin empezar,,15/06/2026,Parcial 2,Alta,Diany Guerra,Sprint 1
+"RF16,3 - Historial de Movimientos","Necesito: Interfaz informativa de auditoría con entradas/salidas.
+Notas: Solo lectura.
+Fuente: GN7_Backlog_V0.2.xlsx, hoja Sprint0, Sprint 1 y Sprint 2, fila 57.",,Sin empezar,,15/06/2026,Parcial 2,Media,Paul Moreno,Sprint 1
