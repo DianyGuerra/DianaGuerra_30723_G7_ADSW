@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: fastkote-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: fastkote_db
+      POSTGRES_USER: fastkote_user
+      POSTGRES_PASSWORD: fastkote_pass
+    ports:
+      - "5432:5432"
+    volumes:
+      - fastkote_postgres_data:/var/lib/postgresql/data
+
+volumes:
+  fastkote_postgres_data:
