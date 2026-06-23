@@ -1,0 +1,58 @@
+import {
+  AlertTriangle,
+  BadgePercent,
+  CalendarDays,
+  CheckCircle,
+  Circle,
+  Download,
+  Eye,
+  FileText,
+  LayoutDashboard,
+  Lock,
+  LogOut,
+  Menu,
+  MessageCircle,
+  Package,
+  Pencil,
+  Plus,
+  Search,
+  Settings,
+  ShoppingBasket,
+  Sparkles,
+  UserCog,
+  Users,
+  Utensils,
+  XCircle,
+} from "lucide-react";
+
+const iconMap = {
+  dashboard: LayoutDashboard,
+  quote: FileText,
+  client: Users,
+  calendar: CalendarDays,
+  package: Package,
+  promo: BadgePercent,
+  service: Utensils,
+  supply: ShoppingBasket,
+  employee: UserCog,
+  lock: Lock,
+  search: Search,
+  settings: Settings,
+  eye: Eye,
+  edit: Pencil,
+  download: Download,
+  whatsapp: MessageCircle,
+  check: CheckCircle,
+  close: XCircle,
+  alert: AlertTriangle,
+  plus: Plus,
+  logout: LogOut,
+  menu: Menu,
+  wand: Sparkles,
+  file: FileText,
+};
+
+export function AppIcon({ name, className = "h-4 w-4" }) {
+  const LucideIcon = iconMap[name] || Circle;
+  return <LucideIcon aria-hidden="true" className={className} strokeWidth={2} />;
+}

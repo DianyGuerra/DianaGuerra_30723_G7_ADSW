@@ -1,0 +1,308 @@
+{
+  "negocio": "Chichi Está de Fiesta",
+  "version": "1.0",
+  "descripcion": "Base de conocimiento para recomendaciones de FastKote.",
+
+  "tiposEvento": [
+    "Cumpleaños infantil",
+    "Fiesta infantil",
+    "Evento escolar",
+    "Mesa dulce",
+    "Evento familiar",
+    "Evento corporativo",
+    "Navidad",
+    "Dia del Niño",
+    "Inauguración",
+    "Campaña promocional"
+  ],
+
+  "productos": [
+    {
+      "nombre": "Canguil",
+      "categoria": "Snack",
+      "unidad": "porción"
+    },
+    {
+      "nombre": "Algodón de azúcar",
+      "categoria": "Snack",
+      "unidad": "unidad"
+    },
+    {
+      "nombre": "Granizado",
+      "categoria": "Bebida",
+      "unidad": "vaso"
+    },
+    {
+      "nombre": "Mini Hot Dog",
+      "categoria": "Snack",
+      "unidad": "unidad"
+    },
+    {
+      "nombre": "Mini Pancake",
+      "categoria": "Snack",
+      "unidad": "unidad"
+    },
+    {
+      "nombre": "Brocheta de chocolate",
+      "categoria": "Snack",
+      "unidad": "unidad"
+    },
+    {
+      "nombre": "Pan de almidón",
+      "categoria": "Snack",
+      "unidad": "unidad"
+    },
+    {
+      "nombre": "Fresas con crema",
+      "categoria": "Postre",
+      "unidad": "vaso"
+    },
+    {
+      "nombre": "Jugo",
+      "categoria": "Bebida",
+      "unidad": "vaso"
+    }
+  ],
+
+  "servicios": [
+    {
+      "nombre": "Estación de canguil",
+      "categoria": "Estación"
+    },
+    {
+      "nombre": "Estación de algodón de azúcar",
+      "categoria": "Estación"
+    },
+    {
+      "nombre": "Estación de granizados",
+      "categoria": "Estación"
+    },
+    {
+      "nombre": "Estación de snacks",
+      "categoria": "Estación"
+    },
+    {
+      "nombre": "Área de juegos",
+      "categoria": "Entretenimiento"
+    },
+    {
+      "nombre": "Playground",
+      "categoria": "Entretenimiento"
+    },
+    {
+      "nombre": "Mini cancha",
+      "categoria": "Entretenimiento"
+    },
+    {
+      "nombre": "Futbolín",
+      "categoria": "Entretenimiento"
+    },
+    {
+      "nombre": "Área para escalar",
+      "categoria": "Entretenimiento"
+    },
+    {
+      "nombre": "Salón de eventos",
+      "categoria": "Infraestructura"
+    },
+    {
+      "nombre": "Mesa principal decorada",
+      "categoria": "Decoración"
+    },
+    {
+      "nombre": "Centros de mesa",
+      "categoria": "Decoración"
+    },
+    {
+      "nombre": "Fondos para fotografías",
+      "categoria": "Decoración"
+    },
+    {
+      "nombre": "Decoración temática",
+      "categoria": "Decoración"
+    },
+    {
+      "nombre": "Piñata personalizada",
+      "categoria": "Personalización"
+    },
+    {
+      "nombre": "Piñata temática",
+      "categoria": "Personalización"
+    },
+    {
+      "nombre": "Piñata numérica",
+      "categoria": "Personalización"
+    },
+    {
+      "nombre": "Photo Booth 360",
+      "categoria": "Experiencia"
+    },
+    {
+      "nombre": "Personal de apoyo",
+      "categoria": "Staff"
+    }
+  ],
+
+  "paquetes": [
+    {
+      "nombre": "Paquete Infantil Básico",
+      "tipoEvento": ["Cumpleaños infantil"],
+      "precio": 90,
+      "capacidadMaxima": 30,
+      "incluye": [
+        "Granizado",
+        "Canguil",
+        "Transporte local"
+      ]
+    },
+
+    {
+      "nombre": "Arma tu paquete a tu gusto",
+      "precio": 99,
+      "tipoEvento": ["Cumpleaños infantil", "Evento familiar"],
+      "capacidadMaxima": 50,
+      "incluye": [
+        "200 unidades personalizables"
+      ],
+      "opcionesDisponibles": [
+        "Canguil",
+        "Algodón de azúcar",
+        "Granizados",
+        "Brochetas de chocolate"
+      ]
+    },
+
+    {
+      "nombre": "Combo Súper Fiesta",
+      "precio": 99.99,
+      "tipoEvento": ["Cumpleaños infantil"],
+      "capacidadMaxima": 50,
+      "incluye": [
+        "Juego de 3 mesas",
+        "50 unidades de 3 snacks",
+        "Piñata personalizada",
+        "Portasorpresas"
+      ]
+    },
+
+    {
+      "nombre": "Combo Día del Niño Básico",
+      "precioPorNino": 5,
+      "tipoEvento": ["Dia del Niño", "Evento escolar"],
+      "minimoNinos": 20,
+      "incluye": [
+        "2 horas de juegos",
+        "Canguil ilimitado",
+        "100 vasos de jugo"
+      ]
+    },
+
+    {
+      "nombre": "Combo Día del Niño Premium",
+      "precioPorNino": 6,
+      "tipoEvento": ["Dia del Niño", "Evento escolar"],
+      "minimoNinos": 20,
+      "incluye": [
+        "2 horas de juegos",
+        "Canguil ilimitado",
+        "Algodón de azúcar",
+        "100 vasos de jugo",
+        "Mini Hot Dog o Mini Pancake"
+      ]
+    },
+
+    {
+      "nombre": "Combo Navideño Básico",
+      "precio": 60,
+      "tipoEvento": ["Navidad"],
+      "incluye": [
+        "50 Canguiles",
+        "25 Mini Pancakes",
+        "25 Granizados",
+        "50 Panes de Almidón"
+      ]
+    },
+
+    {
+      "nombre": "Combo Navideño Intermedio",
+      "precio": 70,
+      "tipoEvento": ["Navidad"],
+      "incluye": [
+        "30 Brochetas",
+        "30 Granizados",
+        "30 Panes de Almidón",
+        "30 Algodones de Azúcar"
+      ]
+    },
+
+    {
+      "nombre": "Combo Navideño Premium",
+      "precio": 80,
+      "tipoEvento": ["Navidad"],
+      "incluye": [
+        "Canguil ilimitado",
+        "30 Mini Hot Dog",
+        "30 Granizados",
+        "100 Vasos de Jugo"
+      ]
+    },
+
+    {
+      "nombre": "Combo Bronce",
+      "precio": 75,
+      "tipoEvento": ["Cumpleaños infantil", "Evento familiar"],
+      "incluye": [
+        "50 Granizados",
+        "50 Mini Hot Dog",
+        "50 Brochetas de Chocolate"
+      ]
+    },
+
+    {
+      "nombre": "Combo Plata",
+      "precio": 100,
+      "tipoEvento": ["Cumpleaños infantil", "Evento familiar"],
+      "incluye": [
+        "Canguil ilimitado",
+        "50 Granizados",
+        "50 Brochetas de Chocolate"
+      ]
+    },
+
+    {
+      "nombre": "Combo Oro",
+      "precio": 120,
+      "tipoEvento": ["Cumpleaños infantil", "Evento familiar"],
+      "incluye": [
+        "50 Granizados",
+        "50 Canguiles",
+        "50 Algodones de Azúcar",
+        "50 Brochetas de Chocolate",
+        "50 Mini Hot Dog"
+      ]
+    }
+  ],
+
+  "promociones": [
+    {
+      "nombre": "Día del Niño",
+      "descuento": "15%",
+      "aplicaA": [
+        "Combo Día del Niño Básico",
+        "Combo Día del Niño Premium"
+      ],
+      "condicion": "Eventos infantiles realizados durante la campaña del Día del Niño"
+    },
+
+    {
+      "nombre": "Navidad",
+      "descuento": "10%",
+      "aplicaA": [
+        "Combo Navideño Básico",
+        "Combo Navideño Intermedio",
+        "Combo Navideño Premium"
+      ],
+      "condicion": "Promoción válida durante temporada navideña"
+    }
+  ]
+}
