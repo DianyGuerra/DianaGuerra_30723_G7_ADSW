@@ -1,0 +1,28 @@
+import { roundMoney } from './PricingStrategy.js';
+export class PerChildPricingStrategy {
+    supports(input) {
+        return Boolean(input.packageRecord?.pricePerChild);
+    }
+    calculate(input) {
+        const minChildren = Number(input.packageRecord.minChildren ?? 1);
+        const childrenCount = Math.max(Number(input.childrenCount ?? minChildren), minChildren);
+        const unitPrice = Number(input.packageRecord.pricePerChild);
+        const subtotal = roundMoney(childrenCount * unitPrice);
+        const discount = roundMoney(input.discount ?? 0);
+        const tax = roundMoney((subtotal - discount) * input.taxRate);
+        const total = roundMoney(subtotal - discount + tax);
+        return {
+            subtotal,
+            discount,
+            tax,
+            total,
+            items: [{
+                    description: `${input.packageRecord.name} (${childrenCount} niños/personas)`,
+                    category: 'Paquete por persona',
+                    quantity: childrenCount,
+                    unitPrice,
+                    subtotal,
+                }],
+        };
+    }
+}
