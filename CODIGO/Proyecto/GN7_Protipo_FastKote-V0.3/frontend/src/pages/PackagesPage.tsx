@@ -83,7 +83,7 @@ export function PackagesPage() {
         <Modal title={editing ? 'Editar paquete' : 'Registrar paquete'} onClose={() => { setCreating(false); setEditing(null); setForm(emptyPackage); }}>
           <form className="form-grid" onSubmit={submit}>
             <label>Nombre<input required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} /></label>
-            <label>Margen de ganancia<input type="number" step="0.1" value={form.marginPercent} onChange={(e) => setForm({ ...form, marginPercent: Number(e.target.value) })} /></label>
+            <label>Margen de ganancia<input type="number" step="0.1" min="0" value={form.marginPercent} onChange={(e) => setForm({ ...form, marginPercent: Math.max(0, Number(e.target.value)) })} /></label>
             <label className="full-row">Descripción<textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} rows={3} /></label>
             <label className="full-row">Tipos de evento<input value={form.eventTypes} onChange={(e) => setForm({ ...form, eventTypes: e.target.value })} /></label>
             <button className="primary-btn">Guardar</button>
@@ -115,8 +115,8 @@ export function PackagesPage() {
                 <input placeholder="Ítem" value={itemForm.name} onChange={(e) => setItemForm({ ...itemForm, name: e.target.value })} />
                 <input placeholder="Categoría" value={itemForm.category} onChange={(e) => setItemForm({ ...itemForm, category: e.target.value })} />
                 <input placeholder="Unidad" value={itemForm.unit} onChange={(e) => setItemForm({ ...itemForm, unit: e.target.value })} />
-                <input type="number" value={itemForm.quantity} onChange={(e) => setItemForm({ ...itemForm, quantity: Number(e.target.value) })} />
-                <input type="number" step="0.01" value={itemForm.basePrice} onChange={(e) => setItemForm({ ...itemForm, basePrice: Number(e.target.value) })} />
+                <input type="number" min="1" value={itemForm.quantity} onChange={(e) => setItemForm({ ...itemForm, quantity: Math.max(1, Number(e.target.value)) })} />
+                <input type="number" step="0.01" min="0" value={itemForm.basePrice} onChange={(e) => setItemForm({ ...itemForm, basePrice: Math.max(0, Number(e.target.value)) })} />
                 <button className="secondary-btn" onClick={saveItem}>Vincular al paquete</button>
               </div>
             </section>

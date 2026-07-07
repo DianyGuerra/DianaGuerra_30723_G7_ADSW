@@ -101,8 +101,8 @@ export function InventoryPage() {
             <label>Nombre<input required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} /></label>
             <label>Unidad<input required value={form.unit} onChange={(e) => setForm({ ...form, unit: e.target.value })} /></label>
             <label>Marca opcional<input value={form.brand} onChange={(e) => setForm({ ...form, brand: e.target.value })} /></label>
-            <label>Costo actual<input type="number" step="0.01" value={form.currentCost} onChange={(e) => setForm({ ...form, currentCost: Number(e.target.value) })} /></label>
-            <label>Stock inicial<input type="number" value={form.stock} onChange={(e) => setForm({ ...form, stock: Number(e.target.value) })} /></label>
+            <label>Costo actual<input type="number" step="0.01" min="0" value={form.currentCost} onChange={(e) => setForm({ ...form, currentCost: Math.max(0, Number(e.target.value)) })} /></label>
+            <label>Stock inicial<input type="number" min="0" value={form.stock} onChange={(e) => setForm({ ...form, stock: Math.max(0, Number(e.target.value)) })} /></label>
             <button className="primary-btn">Guardar</button>
           </form>
         </Modal>
@@ -132,7 +132,7 @@ export function InventoryPage() {
       {costModal && (
         <Modal title="Actualizar costo de insumo" onClose={() => setCostModal(null)}>
           <p>Costo anterior: <strong>${formatMoney(costModal.currentCost)}</strong></p>
-          <label className="full-row">Nuevo costo<input type="number" step="0.01" value={costModal.currentCost} onChange={(e) => setCostModal({ ...costModal, currentCost: e.target.value })} /></label>
+          <label className="full-row">Nuevo costo<input type="number" step="0.01" min="0" value={costModal.currentCost} onChange={(e) => setCostModal({ ...costModal, currentCost: String(Math.max(0, Number(e.target.value))) })} /></label>
           <button type="button" className="primary-btn" onClick={saveCost}>Guardar costo</button>
         </Modal>
       )}
@@ -141,8 +141,8 @@ export function InventoryPage() {
         <Modal title="Registrar movimiento" onClose={() => setMovementModal(null)}>
           <div className="form-grid">
             <label>Tipo<select value={movement.type} onChange={(e) => setMovement({ ...movement, type: e.target.value as any })}><option value="IN">Entrada</option><option value="OUT">Salida</option><option value="COST_UPDATE">Cambio de costo</option></select></label>
-            <label>Cantidad<input type="number" value={movement.quantity} onChange={(e) => setMovement({ ...movement, quantity: Number(e.target.value) })} /></label>
-            <label>Nuevo costo<input type="number" step="0.01" value={movement.newCost} onChange={(e) => setMovement({ ...movement, newCost: Number(e.target.value) })} /></label>
+            <label>Cantidad<input type="number" min="1" value={movement.quantity} onChange={(e) => setMovement({ ...movement, quantity: Math.max(1, Number(e.target.value)) })} /></label>
+            <label>Nuevo costo<input type="number" step="0.01" min="0" value={movement.newCost} onChange={(e) => setMovement({ ...movement, newCost: Math.max(0, Number(e.target.value)) })} /></label>
             <label>Notas<input value={movement.notes} onChange={(e) => setMovement({ ...movement, notes: e.target.value })} /></label>
             <button type="button" className="primary-btn" onClick={saveMovement}>Guardar movimiento</button>
           </div>

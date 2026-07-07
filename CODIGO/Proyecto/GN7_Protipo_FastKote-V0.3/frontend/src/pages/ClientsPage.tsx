@@ -2,6 +2,7 @@ import { FormEvent, useEffect, useState } from 'react';
 import { Client, ClientPayload, createClient, listClients, updateClient } from '../api/clients';
 import { Badge } from '../components/ui/Badge';
 import { Modal } from '../components/ui/Modal';
+import { cleanDigits, cleanName, validateEcuadorianId } from '../utils/validation';
 
 const emptyClient: ClientPayload = {
   type: 'NATURAL',
@@ -42,6 +43,10 @@ export function ClientsPage() {
   async function submit(event: FormEvent) {
     event.preventDefault();
     setError('');
+    if (!validateEcuadorianId(form.identification)) {
+      setError('La identificación (Cédula o RUC) no es válida en Ecuador. Verifique los dígitos ingresados.');
+      return;
+    }
     try {
       if (editing) await updateClient(editing.id, form);
       else await createClient(form);
@@ -113,10 +118,10 @@ export function ClientsPage() {
         <Modal title={editing ? 'Actualizar datos del cliente' : 'Registrar Cliente'} onClose={() => { setEditing(null); setCreating(false); setForm(emptyClient); }}>
           <form className="form-grid" onSubmit={submit}>
             <label>Tipo<select value={form.type} onChange={(e) => setForm({ ...form, type: e.target.value as ClientPayload['type'] })}><option value="NATURAL">Natural</option><option value="JURIDICAL">Jurídica</option></select></label>
-            <label>Nombre<input required value={form.fullName} onChange={(e) => setForm({ ...form, fullName: e.target.value })} /></label>
-            <label>Cédula/RUC<input required value={form.identification} onChange={(e) => setForm({ ...form, identification: e.target.value })} /></label>
+            <label>Nombre<input required value={form.fullName} onChange={(e) => setForm({ ...form, fullName: cleanName(e.target.value) })} /></label>
+            <label>Cédula/RUC<input required value={form.identification} onChange={(e) => setForm({ ...form, identification: cleanDigits(e.target.value) })} /></label>
             <label>Correo<input required type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} /></label>
-            <label>Celular<input required value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} /></label>
+            <label>Celular<input required value={form.phone} onChange={(e) => setForm({ ...form, phone: cleanDigits(e.target.value) })} /></label>
             <label>Dirección<input required value={form.address} onChange={(e) => setForm({ ...form, address: e.target.value })} /></label>
             <label className="check"><input type="checkbox" checked={form.privacyConsent} onChange={(e) => setForm({ ...form, privacyConsent: e.target.checked })} /> Acepta tratamiento de datos personales</label>
             {error && <div className="alert error">{error}</div>}

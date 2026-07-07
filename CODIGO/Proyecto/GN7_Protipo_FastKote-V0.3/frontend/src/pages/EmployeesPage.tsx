@@ -2,6 +2,7 @@ import { FormEvent, useEffect, useState } from 'react';
 import { assignRoles, createEmployee, deactivateEmployee, Employee, listEmployees, listRoles, Role, updateEmployee } from '../api/employees';
 import { Badge } from '../components/ui/Badge';
 import { Modal } from '../components/ui/Modal';
+import { cleanDigits, cleanName, validateEcuadorianId } from '../utils/validation';
 
 const emptyEmployee = {
   identification: '',
@@ -59,6 +60,10 @@ export function EmployeesPage() {
   async function submit(event: FormEvent) {
     event.preventDefault();
     setError('');
+    if (!validateEcuadorianId(form.identification)) {
+      setError('La identificación (Cédula) no es válida en Ecuador. Verifique los dígitos ingresados.');
+      return;
+    }
     try {
       if (!editing && form.roleIds.length === 0) {
         setError('Selecciona al menos un rol para el usuario.');
@@ -146,11 +151,11 @@ export function EmployeesPage() {
       {showForm && (
         <Modal title={editing ? 'Editar información del empleado' : 'Registrar nuevo empleado'} onClose={() => { setEditing(null); setCreating(false); setForm(emptyEmployee); }}>
           <form className="form-grid" onSubmit={submit}>
-            <label>Cédula<input required value={form.identification} onChange={(e) => setForm({ ...form, identification: e.target.value })} /></label>
-            <label>Nombres<input required value={form.firstName} onChange={(e) => setForm({ ...form, firstName: e.target.value })} /></label>
-            <label>Apellidos<input required value={form.lastName} onChange={(e) => setForm({ ...form, lastName: e.target.value })} /></label>
+            <label>Cédula<input required value={form.identification} onChange={(e) => setForm({ ...form, identification: cleanDigits(e.target.value) })} /></label>
+            <label>Nombres<input required value={form.firstName} onChange={(e) => setForm({ ...form, firstName: cleanName(e.target.value) })} /></label>
+            <label>Apellidos<input required value={form.lastName} onChange={(e) => setForm({ ...form, lastName: cleanName(e.target.value) })} /></label>
             <label>Correo<input required type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} /></label>
-            <label>Teléfono<input value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} /></label>
+            <label>Teléfono<input value={form.phone} onChange={(e) => setForm({ ...form, phone: cleanDigits(e.target.value) })} /></label>
             <label>Cargo<input value={form.position} onChange={(e) => setForm({ ...form, position: e.target.value })} /></label>
             <label className="full-row">Dirección<input value={form.address} onChange={(e) => setForm({ ...form, address: e.target.value })} /></label>
 

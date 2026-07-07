@@ -1,8 +1,9 @@
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useEffect, useMemo, useState } from 'react';
 import { Client, listClients } from '../api/clients';
 import { createQuote, downloadQuotePdf, listPackages, listQuotes, Package, Quote, sendQuoteWhatsApp, updateQuoteStatus } from '../api/quotes';
 import { Badge } from '../components/ui/Badge';
 import { Modal } from '../components/ui/Modal';
+import { listPromotions, PromotionRecord } from '../api/catalog';
 
 const eventTypes = ['Cumpleaños infantil', 'Fiesta infantil', 'Evento escolar', 'Mesa dulce', 'Evento familiar', 'Evento corporativo', 'Navidad', 'Dia del Niño'];
 
@@ -10,30 +11,89 @@ export function QuotesPage() {
   const [quotes, setQuotes] = useState<Quote[]>([]);
   const [clients, setClients] = useState<Client[]>([]);
   const [packages, setPackages] = useState<Package[]>([]);
+  const [promotions, setPromotions] = useState<PromotionRecord[]>([]);
   const [filters, setFilters] = useState({ status: '', dateFrom: '', dateTo: '' });
   const [wizard, setWizard] = useState(false);
   const [statusQuote, setStatusQuote] = useState<Quote | null>(null);
   const [message, setMessage] = useState('');
   const [form, setForm] = useState({ clientId: '', eventDate: '', eventType: eventTypes[0], packageId: '', childrenCount: 20, discount: 0, notes: '' });
+  const [selectedPromoId, setSelectedPromoId] = useState<string>('');
 
   async function load() {
     const activeFilters = Object.fromEntries(Object.entries(filters).filter(([, value]) => value));
     setQuotes(await listQuotes(activeFilters));
     setClients(await listClients());
     setPackages(await listPackages());
+    try {
+      setPromotions(await listPromotions());
+    } catch (err) {
+      console.error('No se pudieron cargar las promociones', err);
+    }
   }
 
   useEffect(() => { load(); }, []);
 
+  const activePromosForSelectedPackage = useMemo(() => {
+    if (!form.packageId) return [];
+    const now = new Date();
+    return promotions.filter((promo) => {
+      if (!promo.active) return false;
+      const targetsPackage = promo.packages.some((p) => p.package.id === form.packageId);
+      if (!targetsPackage) return false;
+
+      // Opcional: verificación de fechas de vigencia
+      if (promo.startDate) {
+        const start = new Date(promo.startDate);
+        if (start > now) return false;
+      }
+      if (promo.endDate) {
+        const end = new Date(promo.endDate + 'T23:59:59');
+        if (end < now) return false;
+      }
+      return true;
+    });
+  }, [promotions, form.packageId]);
+
+  function handlePackageChange(packageId: string) {
+    setSelectedPromoId('');
+    setForm((f) => ({ ...f, packageId, discount: 0 }));
+  }
+
+  function handlePromoChange(promoId: string) {
+    setSelectedPromoId(promoId);
+    const promo = activePromosForSelectedPackage.find((p) => p.id === promoId);
+    if (promo) {
+      setForm((f) => ({ ...f, discount: Number(promo.discountPercent) }));
+    } else {
+      setForm((f) => ({ ...f, discount: 0 }));
+    }
+  }
+
+  function calculateSubtotal() {
+    const selectedPkg = packages.find((p) => p.id === form.packageId);
+    if (!selectedPkg) return 100; // Personalizado simple base price
+    if (selectedPkg.pricePerChild && Number(selectedPkg.pricePerChild) > 0) {
+      const minChildren = Number(selectedPkg.minChildren ?? 1);
+      const childrenCount = Math.max(Number(form.childrenCount ?? minChildren), minChildren);
+      return childrenCount * Number(selectedPkg.pricePerChild);
+    }
+    return Number(selectedPkg.basePrice ?? 0);
+  }
+
   async function submit(event: FormEvent) {
     event.preventDefault();
+    const subtotal = calculateSubtotal();
+    const discountPercent = Math.min(100, Math.max(0, Number(form.discount)));
+    const discountAmount = Number((subtotal * (discountPercent / 100)).toFixed(2));
+
     await createQuote({
       ...form,
       childrenCount: Number(form.childrenCount),
-      discount: Number(form.discount),
+      discount: discountAmount,
       customItems: form.packageId ? undefined : [{ description: 'Servicio personalizado', category: 'Personalizado', quantity: 1, unitPrice: 100 }],
     });
     setWizard(false);
+    setSelectedPromoId('');
     await load();
   }
 
@@ -100,18 +160,33 @@ export function QuotesPage() {
       </section>
 
       {wizard && (
-        <Modal title="Wizard de generación de cotización" onClose={() => setWizard(false)}>
+        <Modal title="Wizard de generación de cotización" onClose={() => { setWizard(false); setSelectedPromoId(''); setForm({ clientId: '', eventDate: '', eventType: eventTypes[0], packageId: '', childrenCount: 20, discount: 0, notes: '' }); }}>
           <form className="form-grid wizard" onSubmit={submit}>
             <h3>Paso 1: Cliente</h3>
             <label>Cliente<select required value={form.clientId} onChange={(e) => setForm({ ...form, clientId: e.target.value })}><option value="">Seleccione</option>{clients.map((client) => <option key={client.id} value={client.id}>{client.fullName}</option>)}</select></label>
             <h3>Paso 2: Paquete base</h3>
-            <label>Paquete<select value={form.packageId} onChange={(e) => setForm({ ...form, packageId: e.target.value })}><option value="">Personalizado simple</option>{packages.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}</select></label>
+            <label>Paquete<select value={form.packageId} onChange={(e) => handlePackageChange(e.target.value)}><option value="">Personalizado simple</option>{packages.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}</select></label>
             <h3>Paso 3: Fecha y tipo de evento</h3>
             <label>Fecha tentativa<input required type="date" value={form.eventDate} onChange={(e) => setForm({ ...form, eventDate: e.target.value })} /></label>
             <label>Tipo de evento<select value={form.eventType} onChange={(e) => setForm({ ...form, eventType: e.target.value })}>{eventTypes.map((item) => <option key={item}>{item}</option>)}</select></label>
             <h3>Paso 4: Ajustes comerciales</h3>
-            <label>Número de niños/personas<input type="number" value={form.childrenCount} onChange={(e) => setForm({ ...form, childrenCount: Number(e.target.value) })} /></label>
-            <label>Descuento<input type="number" value={form.discount} onChange={(e) => setForm({ ...form, discount: Number(e.target.value) })} /></label>
+            <label>Número de niños/personas<input type="number" min="1" value={form.childrenCount} onChange={(e) => setForm({ ...form, childrenCount: Math.max(1, Number(e.target.value)) })} /></label>
+            
+            {form.packageId && activePromosForSelectedPackage.length > 0 && (
+              <label>
+                Promoción activa aplicable
+                <select value={selectedPromoId} onChange={(e) => handlePromoChange(e.target.value)}>
+                  <option value="">Sin promoción aplicada</option>
+                  {activePromosForSelectedPackage.map((promo) => (
+                    <option key={promo.id} value={promo.id}>
+                      {promo.name} ({Number(promo.discountPercent)}% desc.)
+                    </option>
+                  ))}
+                </select>
+              </label>
+            )}
+
+            <label>Descuento (%)<input type="number" min="0" max="100" step="0.1" value={form.discount} onChange={(e) => { setSelectedPromoId(''); setForm({ ...form, discount: Math.min(100, Math.max(0, Number(e.target.value))) }); }} /></label>
             <label>Notas<input value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} /></label>
             <button className="primary-btn">Generar cotización</button>
           </form>
