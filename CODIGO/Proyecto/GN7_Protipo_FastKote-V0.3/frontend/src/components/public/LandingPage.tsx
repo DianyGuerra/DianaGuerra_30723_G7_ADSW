@@ -2,11 +2,11 @@ export function LandingPage({ onLogin, onRegister }: { onLogin: () => void; onRe
   return (
     <main className="public-page">
       <header className="public-header">
-        <div className="public-brand">
-          <div className="brand-mark">FK</div>
-          <div>
-            <strong>FastKote</strong>
-            <span>Chichi Está de Fiesta</span>
+        <div className="public-brand" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <img src="/assets/logo.png" alt="FastKote Logo" style={{ height: '40px', width: 'auto', objectFit: 'contain' }} />
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
+            <strong style={{ fontSize: '15px', lineHeight: '1.2' }}>FastKote</strong>
+            <span style={{ fontSize: '11px', color: '#6b7280' }}>Chichi Está de Fiesta</span>
           </div>
         </div>
 

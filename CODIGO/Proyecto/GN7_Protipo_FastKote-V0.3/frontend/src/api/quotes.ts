@@ -53,3 +53,11 @@ export async function downloadQuotePdf(id: string) {
 export function listCalendar() {
   return apiFetch<any[]>('/calendar');
 }
+
+export function updateQuote(id: string, payload: unknown) {
+  return apiFetch<Quote>(`/quotes/${id}`, { method: 'PUT', body: JSON.stringify(payload) });
+}
+
+export function updateReservationStatus(id: string, status: string) {
+  return apiFetch<any>(`/calendar/${id}/status`, { method: 'PATCH', body: JSON.stringify({ status }) });
+}

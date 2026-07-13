@@ -15,6 +15,7 @@ import { CreateQuoteHandler } from '../../application/quotes/CreateQuote.handler
 import { UpdateQuoteHandler } from '../../application/quotes/UpdateQuote.handler.js';
 import { UpdateQuoteStatusHandler } from '../../application/quotes/UpdateQuoteStatus.handler.js';
 import { ListCalendarHandler } from '../../application/quotes/ListCalendar.handler.js';
+import { UpdateReservationStatusHandler } from '../../application/quotes/UpdateReservationStatus.handler.js';
 import { ListPackagesHandler } from '../../application/quotes/ListPackages.handler.js';
 import { GenerateQuotePdfHandler } from '../../application/quotes/GenerateQuotePdf.handler.js';
 import { SendQuoteWhatsAppHandler } from '../../application/quotes/SendQuoteWhatsApp.handler.js';
@@ -62,6 +63,7 @@ export function createMediator() {
     mediator.register('quotes.pdf', new GenerateQuotePdfHandler(quoteRepository, pdfService));
     mediator.register('quotes.sendWhatsapp', new SendQuoteWhatsAppHandler(quoteRepository, pdfService, whatsappGateway));
     mediator.register('calendar.list', new ListCalendarHandler(quoteRepository));
+    mediator.register('calendar.updateStatus', new UpdateReservationStatusHandler(quoteRepository));
     mediator.register('catalog.packages', new ListPackagesHandler(quoteRepository));
     mediator.register('catalog.manage', new CatalogPackagesHandler(catalogRepository));
     mediator.register('inventory.manage', new InventoryHandler(catalogRepository));

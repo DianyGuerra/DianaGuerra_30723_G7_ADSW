@@ -11,5 +11,13 @@ export function createCalendarController(mediator) {
             next(error);
         }
     });
+    router.patch('/:id/status', async (req, res, next) => {
+        try {
+            res.json(await mediator.send('calendar.updateStatus', { id: req.params.id, status: req.body.status }));
+        }
+        catch (error) {
+            next(error);
+        }
+    });
     return router;
 }

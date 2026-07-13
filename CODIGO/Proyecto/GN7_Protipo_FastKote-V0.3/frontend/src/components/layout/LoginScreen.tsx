@@ -24,11 +24,11 @@ export function LoginScreen({ onBack, onRegister }: { onBack: () => void; onRegi
   return (
     <main className="login-page sober-login">
       <header className="public-header compact">
-        <div className="public-brand">
-          <div className="brand-mark">FK</div>
-          <div>
-            <strong>FastKote</strong>
-            <span>Chichi Está de Fiesta</span>
+        <div className="public-brand" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <img src="/assets/logo.png" alt="FastKote Logo" style={{ height: '36px', width: 'auto', objectFit: 'contain' }} />
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
+            <strong style={{ fontSize: '14px', lineHeight: '1.2' }}>FastKote</strong>
+            <span style={{ fontSize: '10px', color: '#6b7280' }}>Chichi Está de Fiesta</span>
           </div>
         </div>
         <div className="public-actions">
@@ -38,7 +38,9 @@ export function LoginScreen({ onBack, onRegister }: { onBack: () => void; onRegi
       </header>
 
       <form className="login-card" onSubmit={handleSubmit}>
-        <div className="brand-mark large">FK</div>
+        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '16px' }}>
+          <img src="/assets/logo.png" alt="FastKote Logo" style={{ height: '70px', width: 'auto', objectFit: 'contain' }} />
+        </div>
         <p className="eyebrow">Acceso interno</p>
         <h1>Iniciar sesión</h1>
         <p>Ingresa como Administrador o Empleado para acceder a los módulos autorizados.</p>

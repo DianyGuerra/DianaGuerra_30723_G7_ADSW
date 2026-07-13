@@ -26,19 +26,40 @@ export class UpdateQuoteHandler {
     }
     async handle(input) {
         const data = schema.parse(input);
+        if (data.eventDate) {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const [y, m, d] = data.eventDate.split('-').map(Number);
+            const eventDateObj = new Date(y, m - 1, d);
+            if (eventDateObj < today) {
+                throw new HttpError(400, 'La fecha del evento no puede ser anterior a la fecha actual.');
+            }
+        }
         const quote = await this.repository.findById(data.id);
         if (!quote)
             throw new HttpError(404, 'Cotización no encontrada.');
-        if (quote.status !== 'DRAFT')
-            throw new HttpError(409, 'Solo se pueden modificar cotizaciones en estado borrador.');
-        const packageRecord = data.packageId ? await this.repository.getPackageById(data.packageId) : undefined;
+        // Fallback to existing fields in quote if they are not provided in data
+        const packageId = data.packageId !== undefined ? data.packageId : quote.packageId;
+        const childrenCount = data.childrenCount !== undefined ? data.childrenCount : quote.childrenCount;
+        const customItems = packageId === undefined && !data.customItems ? quote.items.map((i) => ({
+            description: i.description,
+            category: i.category,
+            quantity: i.quantity,
+            unitPrice: Number(i.unitPrice),
+        })) : data.customItems;
+        const packageRecord = packageId ? await this.repository.getPackageById(packageId) : undefined;
         const pricing = this.pricingContext.calculate({
             packageRecord,
-            childrenCount: data.childrenCount,
-            customItems: data.customItems,
+            childrenCount,
+            customItems,
             discount: data.discount,
             taxRate: env.TAX_RATE,
         });
-        return this.repository.updateDraft(data.id, { ...data, ...pricing });
+        return this.repository.updateDraft(data.id, {
+            ...data,
+            packageId,
+            childrenCount,
+            ...pricing,
+        });
     }
 }

@@ -13,6 +13,7 @@ export interface QuoteRepository {
   updateStatus(id: string, status: string): Promise<unknown>;
   createOrBlockReservation(quoteId: string, eventDate: Date, reason: string): Promise<void>;
   releaseReservation(quoteId: string, reason: string): Promise<void>;
+  updateReservationStatus(id: string, status: string): Promise<unknown>;
   listCalendar(): Promise<unknown[]>;
   listPackages(): Promise<unknown[]>;
   getPackageById(id: string): Promise<any | null>;

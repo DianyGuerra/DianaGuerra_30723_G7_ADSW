@@ -1,5 +1,6 @@
 import { prisma } from '../../shared/prisma/prisma.js';
 import { CatalogRepository } from '../../domain/repositories/CatalogRepository.js';
+import { HttpError } from '../../shared/errors/http-error.js';
 
 function toNumber(value: unknown) {
   return Number(value ?? 0);
@@ -12,13 +13,14 @@ function formatMoney(value: number) {
 function packageFinancials(record: any) {
   const items = record.items ?? [];
   const costTotal = formatMoney(items.reduce((sum: number, item: any) => sum + toNumber(item.basePrice) * Number(item.quantity ?? 1), 0));
+  const minPrice = toNumber(record.minPrice ?? 0);
   const marginPercent = toNumber(record.marginPercent ?? 0);
   const marginAmount = formatMoney(costTotal * (marginPercent / 100));
-  const storedPrice = toNumber(record.basePrice ?? 0);
-  const salePrice = formatMoney(storedPrice > 0 ? storedPrice : costTotal + marginAmount);
+  const salePrice = formatMoney(minPrice + costTotal + marginAmount);
 
   return {
     ...record,
+    minPrice: minPrice.toFixed(2),
     basePrice: salePrice.toFixed(2),
     marginPercent: marginPercent.toFixed(2),
     costTotal: costTotal.toFixed(2),
@@ -50,9 +52,10 @@ export class PrismaCatalogRepository implements CatalogRepository {
     return prisma.catalogPackage.findUnique({ where: { id: packageId }, include: { items: true } }).then((record: any) => {
       if (!record) return null;
       if (record.pricePerChild) return record;
+      const minPrice = toNumber(record.minPrice ?? 0);
       const totalCost = record.items.reduce((sum: number, item: any) => sum + toNumber(item.basePrice) * Number(item.quantity ?? 1), 0);
       const marginPercent = toNumber(record.marginPercent ?? 0);
-      const salePrice = formatMoney(totalCost + (totalCost * marginPercent / 100));
+      const salePrice = formatMoney(minPrice + totalCost + (totalCost * marginPercent / 100));
       return prisma.catalogPackage.update({ where: { id: packageId }, data: { basePrice: salePrice } });
     });
   }
@@ -80,6 +83,7 @@ export class PrismaCatalogRepository implements CatalogRepository {
         description: String(data.description ?? ''),
         eventTypes: Array.isArray(data.eventTypes) ? data.eventTypes as string[] : [],
         marginPercent: Number(data.marginPercent ?? 0),
+        minPrice: Number(data.minPrice ?? 0),
         active: data.active !== false,
       },
     });
@@ -94,6 +98,7 @@ export class PrismaCatalogRepository implements CatalogRepository {
         description: data.description !== undefined ? String(data.description) : undefined,
         eventTypes: Array.isArray(data.eventTypes) ? data.eventTypes as string[] : undefined,
         marginPercent: data.marginPercent !== undefined ? Number(data.marginPercent) : undefined,
+        minPrice: data.minPrice !== undefined ? Number(data.minPrice) : undefined,
         active: typeof data.active === 'boolean' ? data.active : undefined,
       },
     });
@@ -116,6 +121,8 @@ export class PrismaCatalogRepository implements CatalogRepository {
           unit: data.unit !== undefined ? String(data.unit) : undefined,
           quantity: data.quantity !== undefined ? Number(data.quantity) : undefined,
           basePrice: data.basePrice !== undefined ? Number(data.basePrice) : undefined,
+          inventoryItemId: data.inventoryItemId !== undefined ? (data.inventoryItemId as string | null) : undefined,
+          serviceId: data.serviceId !== undefined ? (data.serviceId as string | null) : undefined,
           packageId,
         },
       });
@@ -128,6 +135,8 @@ export class PrismaCatalogRepository implements CatalogRepository {
           unit: data.unit ? String(data.unit) : null,
           quantity: Number(data.quantity ?? 1),
           basePrice: Number(data.basePrice ?? 0),
+          inventoryItemId: data.inventoryItemId ? String(data.inventoryItemId) : null,
+          serviceId: data.serviceId ? String(data.serviceId) : null,
         },
       });
     }
@@ -278,6 +287,24 @@ export class PrismaCatalogRepository implements CatalogRepository {
   }
 
   async createPromotion(data: Record<string, unknown>) {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    if (data.startDate) {
+      const [sy, sm, sd] = String(data.startDate).split('-').map(Number);
+      const start = new Date(sy, sm - 1, sd);
+      if (start < today) {
+        throw new HttpError(400, 'La fecha de inicio de la promoción no puede ser anterior a la fecha actual.');
+      }
+    }
+    if (data.endDate) {
+      const [ey, em, ed] = String(data.endDate).split('-').map(Number);
+      const end = new Date(ey, em - 1, ed);
+      if (end < today) {
+        throw new HttpError(400, 'La fecha de fin de la promoción no puede ser anterior a la fecha actual.');
+      }
+    }
+
     const promotion = await prisma.promotion.create({
       data: {
         name: String(data.name),
@@ -299,6 +326,32 @@ export class PrismaCatalogRepository implements CatalogRepository {
   }
 
   async updatePromotion(id: string, data: Record<string, unknown>) {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    if (data.startDate) {
+      const [sy, sm, sd] = String(data.startDate).split('-').map(Number);
+      const start = new Date(sy, sm - 1, sd);
+      const existing = await prisma.promotion.findUnique({ where: { id } });
+      if (existing) {
+        const existingStr = existing.startDate.toISOString().slice(0, 10);
+        if (String(data.startDate) !== existingStr && start < today) {
+          throw new HttpError(400, 'La fecha de inicio de la promoción no puede ser anterior a la fecha actual.');
+        }
+      }
+    }
+    if (data.endDate) {
+      const [ey, em, ed] = String(data.endDate).split('-').map(Number);
+      const end = new Date(ey, em - 1, ed);
+      const existing = await prisma.promotion.findUnique({ where: { id } });
+      if (existing) {
+        const existingStr = existing.endDate.toISOString().slice(0, 10);
+        if (String(data.endDate) !== existingStr && end < today) {
+          throw new HttpError(400, 'La fecha de fin de la promoción no puede ser anterior a la fecha actual.');
+        }
+      }
+    }
+
     await prisma.promotion.update({
       where: { id },
       data: {

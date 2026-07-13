@@ -7,6 +7,8 @@ export interface PackageItem {
   unit?: string;
   quantity: number;
   basePrice: string;
+  inventoryItemId?: string | null;
+  serviceId?: string | null;
 }
 
 export interface PackageRecord {
@@ -15,6 +17,7 @@ export interface PackageRecord {
   description: string;
   eventTypes: string[];
   marginPercent: string;
+  minPrice?: string;
   basePrice?: string;
   pricePerChild?: string;
   minChildren?: number;

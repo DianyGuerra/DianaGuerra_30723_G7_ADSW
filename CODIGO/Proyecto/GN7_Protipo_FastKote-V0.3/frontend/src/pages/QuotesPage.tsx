@@ -1,11 +1,19 @@
 import { FormEvent, useEffect, useMemo, useState } from 'react';
 import { Client, listClients } from '../api/clients';
-import { createQuote, downloadQuotePdf, listPackages, listQuotes, Package, Quote, sendQuoteWhatsApp, updateQuoteStatus } from '../api/quotes';
+import { createQuote, downloadQuotePdf, listPackages, listQuotes, Package, Quote, sendQuoteWhatsApp, updateQuoteStatus, updateQuote } from '../api/quotes';
 import { Badge } from '../components/ui/Badge';
 import { Modal } from '../components/ui/Modal';
 import { listPromotions, PromotionRecord } from '../api/catalog';
 
 const eventTypes = ['Cumpleaños infantil', 'Fiesta infantil', 'Evento escolar', 'Mesa dulce', 'Evento familiar', 'Evento corporativo', 'Navidad', 'Dia del Niño'];
+
+const statusLabels: Record<string, string> = {
+  DRAFT: 'Borrador',
+  SENT: 'Enviada',
+  ACCEPTED: 'Aceptada',
+  REJECTED: 'Rechazada',
+  EXPIRED: 'Vencida',
+};
 
 export function QuotesPage() {
   const [quotes, setQuotes] = useState<Quote[]>([]);
@@ -18,6 +26,7 @@ export function QuotesPage() {
   const [message, setMessage] = useState('');
   const [form, setForm] = useState({ clientId: '', eventDate: '', eventType: eventTypes[0], packageId: '', childrenCount: 20, discount: 0, notes: '' });
   const [selectedPromoId, setSelectedPromoId] = useState<string>('');
+  const [editingQuoteId, setEditingQuoteId] = useState<string | null>(null);
 
   async function load() {
     const activeFilters = Object.fromEntries(Object.entries(filters).filter(([, value]) => value));
@@ -86,15 +95,41 @@ export function QuotesPage() {
     const discountPercent = Math.min(100, Math.max(0, Number(form.discount)));
     const discountAmount = Number((subtotal * (discountPercent / 100)).toFixed(2));
 
-    await createQuote({
+    const payload = {
       ...form,
       childrenCount: Number(form.childrenCount),
       discount: discountAmount,
       customItems: form.packageId ? undefined : [{ description: 'Servicio personalizado', category: 'Personalizado', quantity: 1, unitPrice: 100 }],
-    });
+    };
+
+    if (editingQuoteId) {
+      await updateQuote(editingQuoteId, { ...payload, id: editingQuoteId });
+    } else {
+      await createQuote(payload);
+    }
     setWizard(false);
+    setEditingQuoteId(null);
     setSelectedPromoId('');
+    setForm({ clientId: '', eventDate: '', eventType: eventTypes[0], packageId: '', childrenCount: 20, discount: 0, notes: '' });
     await load();
+  }
+
+  function handleEdit(quote: any) {
+    setEditingQuoteId(quote.id);
+    const sub = Number(quote.subtotal) || 1;
+    const discAmt = Number(quote.discount) || 0;
+    const discPct = Math.round((discAmt / sub) * 100);
+
+    setForm({
+      clientId: quote.clientId,
+      eventDate: String(quote.eventDate).slice(0, 10),
+      eventType: quote.eventType,
+      packageId: quote.packageId || '',
+      childrenCount: quote.childrenCount || 20,
+      discount: discPct,
+      notes: quote.notes || '',
+    });
+    setWizard(true);
   }
 
   async function changeStatus(status: Quote['status']) {
@@ -105,8 +140,28 @@ export function QuotesPage() {
   }
 
   async function sendWhatsApp(quote: Quote) {
-    const response = await sendQuoteWhatsApp(quote.id);
-    setMessage(response.message ?? 'Solicitud de envío procesada.');
+    try {
+      const response = await sendQuoteWhatsApp(quote.id);
+      if (response.simulated) {
+        let digits = quote.client.phone.replace(/\D/g, '');
+        if (digits.length === 10 && digits.startsWith('0')) {
+          digits = '593' + digits.substring(1);
+        }
+        const text = encodeURIComponent(
+          `¡Hola ${quote.client.fullName}! Le compartimos los detalles de su cotización de tipo *${quote.eventType}* con código *${quote.code}* por un total de *$${quote.total}*.`
+        );
+        const whatsappUrl = `https://api.whatsapp.com/send?phone=${digits}&text=${text}`;
+        window.open(whatsappUrl, '_blank');
+        setMessage(`Simulación: Redirigiendo a WhatsApp Web para enviar a ${quote.client.fullName}.`);
+      } else if (response.delivered) {
+        setMessage('¡Cotización enviada con éxito por WhatsApp en segundo plano!');
+      } else {
+        setMessage(response.message ?? 'El proveedor de WhatsApp no pudo procesar el envío.');
+      }
+    } catch (error: any) {
+      console.error(error);
+      setMessage(`Error al enviar por WhatsApp: ${error.message || error}`);
+    }
   }
 
   return (
@@ -149,6 +204,7 @@ export function QuotesPage() {
                 <td><Badge value={quote.status} /></td>
                 <td>${quote.total}</td>
                 <td className="actions">
+                  <button onClick={() => handleEdit(quote)}>Editar</button>
                   <button onClick={() => setStatusQuote(quote)}>Estado</button>
                   <button onClick={() => downloadQuotePdf(quote.id)}>PDF</button>
                   <button onClick={() => sendWhatsApp(quote)}>WhatsApp</button>
@@ -160,14 +216,14 @@ export function QuotesPage() {
       </section>
 
       {wizard && (
-        <Modal title="Wizard de generación de cotización" onClose={() => { setWizard(false); setSelectedPromoId(''); setForm({ clientId: '', eventDate: '', eventType: eventTypes[0], packageId: '', childrenCount: 20, discount: 0, notes: '' }); }}>
+        <Modal title={editingQuoteId ? "Editar Cotización" : "Wizard de generación de cotización"} onClose={() => { setWizard(false); setEditingQuoteId(null); setSelectedPromoId(''); setForm({ clientId: '', eventDate: '', eventType: eventTypes[0], packageId: '', childrenCount: 20, discount: 0, notes: '' }); }}>
           <form className="form-grid wizard" onSubmit={submit}>
             <h3>Paso 1: Cliente</h3>
             <label>Cliente<select required value={form.clientId} onChange={(e) => setForm({ ...form, clientId: e.target.value })}><option value="">Seleccione</option>{clients.map((client) => <option key={client.id} value={client.id}>{client.fullName}</option>)}</select></label>
             <h3>Paso 2: Paquete base</h3>
             <label>Paquete<select value={form.packageId} onChange={(e) => handlePackageChange(e.target.value)}><option value="">Personalizado simple</option>{packages.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}</select></label>
             <h3>Paso 3: Fecha y tipo de evento</h3>
-            <label>Fecha tentativa<input required type="date" value={form.eventDate} onChange={(e) => setForm({ ...form, eventDate: e.target.value })} /></label>
+            <label>Fecha tentativa<input required type="date" min={new Date().toLocaleDateString('sv').split('T')[0]} value={form.eventDate} onChange={(e) => setForm({ ...form, eventDate: e.target.value })} /></label>
             <label>Tipo de evento<select value={form.eventType} onChange={(e) => setForm({ ...form, eventType: e.target.value })}>{eventTypes.map((item) => <option key={item}>{item}</option>)}</select></label>
             <h3>Paso 4: Ajustes comerciales</h3>
             <label>Número de niños/personas<input type="number" min="1" value={form.childrenCount} onChange={(e) => setForm({ ...form, childrenCount: Math.max(1, Number(e.target.value)) })} /></label>
@@ -186,9 +242,9 @@ export function QuotesPage() {
               </label>
             )}
 
-            <label>Descuento (%)<input type="number" min="0" max="100" step="0.1" value={form.discount} onChange={(e) => { setSelectedPromoId(''); setForm({ ...form, discount: Math.min(100, Math.max(0, Number(e.target.value))) }); }} /></label>
+            <label>Descuento (%)<input type="number" min="0" max="100" step="0.1" disabled={!!selectedPromoId} value={form.discount} onChange={(e) => { setSelectedPromoId(''); setForm({ ...form, discount: Math.min(100, Math.max(0, Number(e.target.value))) }); }} /></label>
             <label>Notas<input value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} /></label>
-            <button className="primary-btn">Generar cotización</button>
+            <button className="primary-btn">{editingQuoteId ? "Guardar cambios" : "Generar cotización"}</button>
           </form>
         </Modal>
       )}
@@ -198,7 +254,7 @@ export function QuotesPage() {
           <p>Cotización: <strong>{statusQuote.code}</strong></p>
           <div className="status-actions">
             {(['DRAFT', 'SENT', 'ACCEPTED', 'REJECTED', 'EXPIRED'] as Quote['status'][]).map((status) => (
-              <button key={status} className="secondary-btn" onClick={() => changeStatus(status)}>{status}</button>
+              <button key={status} className="secondary-btn" onClick={() => changeStatus(status)}>{statusLabels[status] || status}</button>
             ))}
           </div>
         </Modal>

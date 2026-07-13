@@ -1,4 +1,5 @@
 import { prisma } from '../../shared/prisma/prisma.js';
+import { HttpError } from '../../shared/errors/http-error.js';
 function toNumber(value) {
     return Number(value ?? 0);
 }
@@ -8,12 +9,13 @@ function formatMoney(value) {
 function packageFinancials(record) {
     const items = record.items ?? [];
     const costTotal = formatMoney(items.reduce((sum, item) => sum + toNumber(item.basePrice) * Number(item.quantity ?? 1), 0));
+    const minPrice = toNumber(record.minPrice ?? 0);
     const marginPercent = toNumber(record.marginPercent ?? 0);
     const marginAmount = formatMoney(costTotal * (marginPercent / 100));
-    const storedPrice = toNumber(record.basePrice ?? 0);
-    const salePrice = formatMoney(storedPrice > 0 ? storedPrice : costTotal + marginAmount);
+    const salePrice = formatMoney(minPrice + costTotal + marginAmount);
     return {
         ...record,
+        minPrice: minPrice.toFixed(2),
         basePrice: salePrice.toFixed(2),
         marginPercent: marginPercent.toFixed(2),
         costTotal: costTotal.toFixed(2),
@@ -47,9 +49,10 @@ export class PrismaCatalogRepository {
                 return null;
             if (record.pricePerChild)
                 return record;
+            const minPrice = toNumber(record.minPrice ?? 0);
             const totalCost = record.items.reduce((sum, item) => sum + toNumber(item.basePrice) * Number(item.quantity ?? 1), 0);
             const marginPercent = toNumber(record.marginPercent ?? 0);
-            const salePrice = formatMoney(totalCost + (totalCost * marginPercent / 100));
+            const salePrice = formatMoney(minPrice + totalCost + (totalCost * marginPercent / 100));
             return prisma.catalogPackage.update({ where: { id: packageId }, data: { basePrice: salePrice } });
         });
     }
@@ -74,6 +77,7 @@ export class PrismaCatalogRepository {
                 description: String(data.description ?? ''),
                 eventTypes: Array.isArray(data.eventTypes) ? data.eventTypes : [],
                 marginPercent: Number(data.marginPercent ?? 0),
+                minPrice: Number(data.minPrice ?? 0),
                 active: data.active !== false,
             },
         });
@@ -87,6 +91,7 @@ export class PrismaCatalogRepository {
                 description: data.description !== undefined ? String(data.description) : undefined,
                 eventTypes: Array.isArray(data.eventTypes) ? data.eventTypes : undefined,
                 marginPercent: data.marginPercent !== undefined ? Number(data.marginPercent) : undefined,
+                minPrice: data.minPrice !== undefined ? Number(data.minPrice) : undefined,
                 active: typeof data.active === 'boolean' ? data.active : undefined,
             },
         });
@@ -107,6 +112,8 @@ export class PrismaCatalogRepository {
                     unit: data.unit !== undefined ? String(data.unit) : undefined,
                     quantity: data.quantity !== undefined ? Number(data.quantity) : undefined,
                     basePrice: data.basePrice !== undefined ? Number(data.basePrice) : undefined,
+                    inventoryItemId: data.inventoryItemId !== undefined ? data.inventoryItemId : undefined,
+                    serviceId: data.serviceId !== undefined ? data.serviceId : undefined,
                     packageId,
                 },
             });
@@ -120,6 +127,8 @@ export class PrismaCatalogRepository {
                     unit: data.unit ? String(data.unit) : null,
                     quantity: Number(data.quantity ?? 1),
                     basePrice: Number(data.basePrice ?? 0),
+                    inventoryItemId: data.inventoryItemId ? String(data.inventoryItemId) : null,
+                    serviceId: data.serviceId ? String(data.serviceId) : null,
                 },
             });
         }
@@ -261,6 +270,22 @@ export class PrismaCatalogRepository {
         });
     }
     async createPromotion(data) {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        if (data.startDate) {
+            const [sy, sm, sd] = String(data.startDate).split('-').map(Number);
+            const start = new Date(sy, sm - 1, sd);
+            if (start < today) {
+                throw new HttpError(400, 'La fecha de inicio de la promoción no puede ser anterior a la fecha actual.');
+            }
+        }
+        if (data.endDate) {
+            const [ey, em, ed] = String(data.endDate).split('-').map(Number);
+            const end = new Date(ey, em - 1, ed);
+            if (end < today) {
+                throw new HttpError(400, 'La fecha de fin de la promoción no puede ser anterior a la fecha actual.');
+            }
+        }
         const promotion = await prisma.promotion.create({
             data: {
                 name: String(data.name),
@@ -281,6 +306,30 @@ export class PrismaCatalogRepository {
         });
     }
     async updatePromotion(id, data) {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        if (data.startDate) {
+            const [sy, sm, sd] = String(data.startDate).split('-').map(Number);
+            const start = new Date(sy, sm - 1, sd);
+            const existing = await prisma.promotion.findUnique({ where: { id } });
+            if (existing) {
+                const existingStr = existing.startDate.toISOString().slice(0, 10);
+                if (String(data.startDate) !== existingStr && start < today) {
+                    throw new HttpError(400, 'La fecha de inicio de la promoción no puede ser anterior a la fecha actual.');
+                }
+            }
+        }
+        if (data.endDate) {
+            const [ey, em, ed] = String(data.endDate).split('-').map(Number);
+            const end = new Date(ey, em - 1, ed);
+            const existing = await prisma.promotion.findUnique({ where: { id } });
+            if (existing) {
+                const existingStr = existing.endDate.toISOString().slice(0, 10);
+                if (String(data.endDate) !== existingStr && end < today) {
+                    throw new HttpError(400, 'La fecha de fin de la promoción no puede ser anterior a la fecha actual.');
+                }
+            }
+        }
         await prisma.promotion.update({
             where: { id },
             data: {
@@ -337,13 +386,14 @@ export class PrismaCatalogRepository {
             const financials = packageFinancials(record);
             const promotion = promotions.find((candidate) => isPromotionActive(candidate) && targetMatchesPromotion(candidate, 'PACKAGE', record.id));
             const discountPercent = promotion ? toNumber(promotion.discountPercent) : 0;
-            const discountedPrice = formatMoney(toNumber(financials.salePrice) * (1 - discountPercent / 100));
+            const baseVal = record.pricePerChild ? toNumber(record.pricePerChild) : toNumber(financials.salePrice);
+            const discountedPrice = formatMoney(baseVal * (1 - discountPercent / 100));
             return {
                 ...financials,
                 promotionName: promotion?.name ?? null,
                 discountPercent,
                 discountedPrice: discountedPrice.toFixed(2),
-                savings: formatMoney(toNumber(financials.salePrice) - discountedPrice).toFixed(2),
+                savings: formatMoney(baseVal - discountedPrice).toFixed(2),
             };
         });
         const servicePreview = services.map((record) => {

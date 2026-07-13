@@ -10,6 +10,8 @@ const itemSchema = z.object({
   unit: z.string().optional(),
   quantity: z.number().int().positive().optional(),
   basePrice: z.number().nonnegative().optional(),
+  inventoryItemId: z.string().uuid().nullable().optional(),
+  serviceId: z.string().uuid().nullable().optional(),
 });
 
 const schema = z.object({
@@ -20,6 +22,7 @@ const schema = z.object({
   description: z.string().optional(),
   eventTypes: z.array(z.string()).optional(),
   marginPercent: z.number().nonnegative().optional(),
+  minPrice: z.number().nonnegative().optional(),
   active: z.boolean().optional(),
   item: itemSchema.optional(),
   itemId: z.string().uuid().optional(),

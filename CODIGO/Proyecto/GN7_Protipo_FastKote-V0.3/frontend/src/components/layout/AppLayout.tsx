@@ -20,11 +20,11 @@ export function AppLayout({ active, onNavigate, children }: { active: ViewName; 
   return (
     <div className="app-shell">
       <aside className="sidebar">
-        <div className="sidebar-logo">
-          <div className="brand-mark">FK</div>
-          <div>
-            <strong>FastKote</strong>
-            <span>Chichi Está de Fiesta</span>
+        <div className="sidebar-logo" style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '12px 16px' }}>
+          <img src="/assets/logo.png" alt="FastKote Logo" style={{ height: '36px', width: 'auto', objectFit: 'contain' }} />
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
+            <strong style={{ fontSize: '14px', lineHeight: '1.2' }}>FastKote</strong>
+            <span style={{ fontSize: '10px', color: '#6b7280' }}>Chichi Está de Fiesta</span>
           </div>
         </div>
 

@@ -232,7 +232,8 @@ p { margin: 0; }
 
 .toolbar { display: flex; gap: 12px; margin-bottom: 16px; }
 .toolbar.three { display: grid; grid-template-columns: 1.2fr 1fr 1fr auto; }
-.toolbar input, .toolbar select, .form-grid input, .form-grid select { width: 100%; border: 1px solid var(--border); border-radius: 14px; padding: 12px; background: #fff; color: var(--text-h); }
+.toolbar input, .toolbar select, .form-grid input, .form-grid select, .form-grid textarea { width: 100%; border: 1px solid var(--border); border-radius: 14px; padding: 12px; background: #fff; color: var(--text-h); font-family: inherit; }
+.form-grid textarea { min-height: 80px; resize: vertical; }
 .table-card { overflow: auto; border-radius: 24px; }
 table { width: 100%; border-collapse: collapse; min-width: 850px; background: #fff; }
 th, td { text-align: left; padding: 16px; border-bottom: 1px solid var(--border); vertical-align: top; }
@@ -296,4 +297,57 @@ tbody tr:hover { background: rgba(124, 58, 237, 0.045); }
   .toolbar.three { grid-template-columns: 1fr; }
   .form-grid { grid-template-columns: 1fr; }
   .dashboard-hero { flex-direction: column; }
+}
+
+.three-panel {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+  margin-bottom: 24px;
+}
+.three-panel section {
+  background: #fbfaff;
+  padding: 16px;
+  border-radius: 16px;
+  border: 1px solid rgba(124, 58, 237, 0.08);
+}
+.three-panel h3 {
+  margin-top: 0;
+  margin-bottom: 12px;
+  font-size: 16px;
+  color: var(--accent-strong);
+}
+.three-panel p {
+  margin: 6px 0;
+  font-size: 14px;
+}
+.small-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px dashed rgba(124, 58, 237, 0.2);
+}
+.small-form input, .small-form select {
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  outline: none;
+  font-size: 13px;
+  background: #fff;
+  color: var(--text-h);
+}
+.small-form input:focus, .small-form select:focus {
+  border-color: var(--accent-border);
+}
+.small-form button {
+  align-self: stretch;
+  margin-top: 4px;
+}
+
+@media (max-width: 780px) {
+  .three-panel {
+    grid-template-columns: 1fr;
+  }
 }

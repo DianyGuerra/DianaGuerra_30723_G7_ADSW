@@ -1,0 +1,71 @@
+{
+  "timestamp": "2026-07-13T15:05:19.091Z",
+  "passedCount": 9,
+  "total": 9,
+  "rate": "100.00%",
+  "results": [
+    {
+      "id": "TC-RF01-01",
+      "name": "Autenticación con Rol Válido (Administrador/Empleado)",
+      "expected": "Ambos logins retornan status 200, JWT token y roles correspondientes (Admin / Empleado).",
+      "obtained": "Admin OK, Empleado OK",
+      "status": "EXITOSO"
+    },
+    {
+      "id": "TC-RF01-02",
+      "name": "Bloqueo de Cuenta por Intentos Fallidos",
+      "expected": "Al 3er intento fallido retorna 401 \"Usuario bloqueado...\". Al 4to intento con contraseña correcta retorna 423 (Locked).",
+      "obtained": "Intento 3 status: 401 (\"Usuario bloqueado por 5 minutos.\"). Intento 4 status: 423 (\"Usuario bloqueado temporalmente por intentos fallidos.\"). BD bloqueada: Sí",
+      "status": "EXITOSO"
+    },
+    {
+      "id": "TC-RF03-01",
+      "name": "Creación de Cliente Exitoso con Consentimiento LOPDP",
+      "expected": "Cliente creado con éxito (201). El campo privacy_consent se registra como true en la base de datos.",
+      "obtained": "Status: 201, ID: 2ac8151a-cafb-4de7-ac8d-8bc833eafc4b, privacyConsent en BD: true",
+      "status": "EXITOSO"
+    },
+    {
+      "id": "TC-RF12-01",
+      "name": "Cotización con Paquete por Niño y Cantidad menor al Mínimo",
+      "expected": "La estrategia aplica la cantidad mínima (20). Subtotal: $100.00, IVA (15%): $15.00, Total: $115.00.",
+      "obtained": "Status: 201, Subtotal: $100, IVA: $15, Total: $115",
+      "status": "EXITOSO"
+    },
+    {
+      "id": "TC-RF13-01",
+      "name": "Modificación de Cotización después de Realizada (SENT)",
+      "expected": "API retorna status 200 permitiendo la edición de la cotización ya realizada.",
+      "obtained": "Status: 200, EventType: \"Actualización permitida\"",
+      "status": "EXITOSO"
+    },
+    {
+      "id": "TC-RF14-01",
+      "name": "Bloqueo de Agenda tras Aceptación de Cotización",
+      "expected": "La cotización cambia a ACCEPTED y se genera un registro en la tabla event_reservations con status BLOCKED.",
+      "obtained": "Status respuesta: 200, Reserva en BD: Encontrada (Status: BLOCKED)",
+      "status": "EXITOSO"
+    },
+    {
+      "id": "TC-RF14-02",
+      "name": "Liberación de Agenda tras Rechazo o Vencimiento",
+      "expected": "La cotización cambia a REJECTED y el estado de la reserva en event_reservations se actualiza a RELEASED.",
+      "obtained": "Status respuesta: 200, Reserva en BD: Encontrada (Status: RELEASED)",
+      "status": "EXITOSO"
+    },
+    {
+      "id": "TC-RF14-03",
+      "name": "Descuento y Devolución de Stock tras Aceptación/Rechazo de Cotización",
+      "expected": "Stock inicial 100 reduce a 30 tras aceptación de cotización con 10 personas, y vuelve a 100 tras rechazo.",
+      "obtained": "Stock tras aceptación: 30 (esperado 30), Stock tras rechazo: 100 (esperado 100)",
+      "status": "EXITOSO"
+    },
+    {
+      "id": "TC-RF15-01",
+      "name": "Simulación de Envío de WhatsApp en Ausencia de Variables",
+      "expected": "El backend retorna status 200 y un objeto conteniendo simulated = true indicando el envío exitoso simulado.",
+      "obtained": "Status: 200, Payload: {\"simulated\":true,\"message\":\"Simulación: cotización FK-2026-118779 enviada a 0987654321.\"}",
+      "status": "EXITOSO"
+    }
+  ]
+}

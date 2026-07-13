@@ -17,7 +17,7 @@ DO $$ BEGIN
 EXCEPTION WHEN duplicate_object THEN NULL; END $$;
 
 DO $$ BEGIN
-  CREATE TYPE reservation_status AS ENUM ('BLOCKED', 'RELEASED');
+  CREATE TYPE reservation_status AS ENUM ('BLOCKED', 'RELEASED', 'COMPLETED');
 EXCEPTION WHEN duplicate_object THEN NULL; END $$;
 
 DO $$ BEGIN
@@ -192,6 +192,8 @@ CREATE TABLE IF NOT EXISTS quotes (
   valid_until DATE NOT NULL,
   notes TEXT,
   created_by_id UUID REFERENCES employees(id),
+  package_id UUID NULL,
+  children_count INTEGER NULL,
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
@@ -229,3 +231,11 @@ ALTER TABLE IF EXISTS catalog_packages
 
 ALTER TABLE IF EXISTS catalog_items
   ADD COLUMN IF NOT EXISTS quantity INTEGER NOT NULL DEFAULT 1;
+
+ALTER TABLE IF EXISTS catalog_packages
+  ADD COLUMN IF NOT EXISTS min_price NUMERIC(10,2) NOT NULL DEFAULT 0;
+
+ALTER TABLE IF EXISTS catalog_items
+  ADD COLUMN IF NOT EXISTS inventory_item_id UUID REFERENCES inventory_items(id) ON DELETE SET NULL,
+  ADD COLUMN IF NOT EXISTS service_id UUID REFERENCES service_catalog(id) ON DELETE SET NULL;
+

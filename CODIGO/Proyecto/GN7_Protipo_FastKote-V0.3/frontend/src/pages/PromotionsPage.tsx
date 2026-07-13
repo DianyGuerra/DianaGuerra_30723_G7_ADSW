@@ -149,8 +149,8 @@ export function PromotionsPage() {
           <form className="form-grid" onSubmit={submit}>
             <label>Nombre<input required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} /></label>
             <label>Porcentaje<input type="number" step="0.1" value={form.discountPercent} onChange={(e) => setForm({ ...form, discountPercent: Number(e.target.value) })} /></label>
-            <label>Inicio<input type="date" value={form.startDate} onChange={(e) => setForm({ ...form, startDate: e.target.value })} /></label>
-            <label>Fin<input type="date" value={form.endDate} onChange={(e) => setForm({ ...form, endDate: e.target.value })} /></label>
+            <label>Inicio<input type="date" min={editing ? undefined : new Date().toLocaleDateString('sv').split('T')[0]} value={form.startDate} onChange={(e) => setForm({ ...form, startDate: e.target.value })} /></label>
+            <label>Fin<input type="date" min={editing ? undefined : new Date().toLocaleDateString('sv').split('T')[0]} value={form.endDate} onChange={(e) => setForm({ ...form, endDate: e.target.value })} /></label>
             <label>Monto mínimo<input type="number" step="0.01" value={form.minAmount} onChange={(e) => setForm({ ...form, minAmount: Number(e.target.value) })} /></label>
             <label className="full-row">Días permitidos<div className="chip-row">{days.map((day) => <button key={day} type="button" className={form.allowedDays.includes(day) ? 'secondary-btn' : 'ghost-btn'} onClick={() => setForm({ ...form, allowedDays: form.allowedDays.includes(day) ? form.allowedDays.filter((value) => value !== day) : [...form.allowedDays, day] })}>{day}</button>)}</div></label>
             <label className="full-row">Paquetes<select multiple value={packageIds} onChange={(e) => setPackageIds(Array.from(e.target.selectedOptions, (option) => option.value))}>{catalogPackages.map((item) => <option key={item.id} value={item.id}>{fixSpanishText(item.name)}</option>)}</select></label>

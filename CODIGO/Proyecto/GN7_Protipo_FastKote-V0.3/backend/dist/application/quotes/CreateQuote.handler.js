@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { env } from '../../shared/config/env.js';
+import { HttpError } from '../../shared/errors/http-error.js';
 const itemSchema = z.object({
     description: z.string().min(2),
     category: z.string().optional(),
@@ -26,6 +27,13 @@ export class CreateQuoteHandler {
     }
     async handle(input) {
         const data = schema.parse(input);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const [y, m, d] = data.eventDate.split('-').map(Number);
+        const eventDateObj = new Date(y, m - 1, d);
+        if (eventDateObj < today) {
+            throw new HttpError(400, 'La fecha del evento no puede ser anterior a la fecha actual.');
+        }
         const packageRecord = data.packageId ? await this.repository.getPackageById(data.packageId) : undefined;
         const pricing = this.pricingContext.calculate({
             packageRecord,
@@ -45,6 +53,8 @@ export class CreateQuoteHandler {
             validUntil,
             notes: data.notes,
             createdById: data.createdById,
+            packageId: data.packageId,
+            childrenCount: data.childrenCount,
             ...pricing,
         });
     }
