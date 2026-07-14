@@ -1,0 +1,314 @@
+@startuml U2T1_Arquitectura_Implementada_FastKote_Color
+title Arquitectura Implementada - FastKote\nReact + Express + Mediator + Prisma + PostgreSQL
+
+skinparam componentStyle rectangle
+left to right direction
+
+skinparam packageStyle rectangle
+skinparam packageTitleFontStyle bold
+skinparam noteBackgroundColor #FCBA62
+skinparam noteBorderColor #A35D05
+skinparam shadowing false
+skinparam defaultFontName Arial
+
+'========================
+' ACTORES
+'========================
+actor "Administrador\n del Sistema" as Admin
+actor "Empleado /\nAdmin. Cotizaciones" as Empleado
+actor "Staff de Eventos" as Staff
+actor "Cliente\nexterno" as Cliente
+
+'========================
+' FRONTEND
+'========================
+package "Capa de Presentación / Frontera\nFrontend React + Vite + TypeScript" #D9EAF7 {
+
+  component "LandingPage.tsx\n<<boundary>>" as Landing #FFFFFF
+  component "LoginScreen.tsx\n<<boundary>>\nRF-01 / CU-SGC-L0-01" as Login #FFFFFF
+  component "AppLayout.tsx\n<<boundary>>\nMenú por rol" as Layout #FFFFFF
+
+  component "DashboardPage.tsx\n<<boundary>>" as Dashboard #FFFFFF
+  component "ClientsPage.tsx\n<<boundary>>\nRF-03 / CU-SGC-L0-04" as ClientsPage #FFFFFF
+  component "EmployeesPage.tsx\n<<boundary>>\nRF-06 / CU-SGC-L0-05" as EmployeesPage #FFFFFF
+  component "QuotesPage.tsx\n<<boundary>>\nRF-02 / CU-SGC-L0-03" as QuotesPage #FFFFFF
+  component "CalendarPage.tsx\n<<boundary>>\nCU-SGC-L1-17" as CalendarPage #FFFFFF
+
+  component "AuthContext.tsx\nSesión + roles" as AuthContext #FFFFFF
+
+  component "API Clients\nhttp.ts / auth.ts / clients.ts\nemployees.ts / quotes.ts" as ApiFrontend #FFFFFF
+}
+
+'========================
+' BACKEND - INTERFACES HTTP
+'========================
+package "Backend FastKote\nNode.js + Express + TypeScript" #EFEFEF {
+
+  package "Capa de Interfaces HTTP / Controladores" #D7E8FF {
+    component "server.ts\nRutas /api" as Server #FFFFFF
+    component "auth.controller.ts" as AuthController #FFFFFF
+    component "clients.controller.ts" as ClientsController #FFFFFF
+    component "employees.controller.ts" as EmployeesController #FFFFFF
+    component "roles.controller.ts" as RolesController #FFFFFF
+    component "quotes.controller.ts" as QuotesController #FFFFFF
+    component "calendar.controller.ts" as CalendarController #FFFFFF
+    component "catalog.controller.ts" as CatalogController #FFFFFF
+    component "auth.middleware.ts\nJWT + allowRoles()" as AuthMiddleware #FFFFFF
+  }
+
+  package "Capa de Aplicación / Casos de Uso" #A8FFA1 {
+    component "Mediator.ts\n<<Mediator>>" as Mediator #FFFFFF
+
+    component "LoginUserHandler\nRF-01" as HLogin #FFFFFF
+
+    component "ClientHandlers\nList / Get / Create / Update\nRF-03" as HClients #FFFFFF
+
+    component "EmployeeHandlers\nList / Create / Update /\nDeactivate / AssignRoles\nRF-06" as HEmployees #FFFFFF
+
+    component "QuoteHandlers\nList / Create / Update /\nUpdateStatus / PDF / WhatsApp\nRF-02" as HQuotes #FFFFFF
+
+    component "ListCalendarHandler\nCU-SGC-L1-17" as HCalendar #FFFFFF
+
+    component "ListPackagesHandler\nRF-04 parcial" as HPackages #FFFFFF
+
+    component "PricingContext\n<<Strategy>>\nFixed / PerChild / Custom" as PricingStrategy #FFFFFF
+
+    component "QuoteStatusContext\n<<Strategy>>\nAccept / Release / Draft-Sent" as StatusStrategy #FFFFFF
+  }
+
+  package "Capa de Dominio / Contratos" #FFF2CC {
+    component "AuthRepository\n<<interface>>" as IAuthRepo #FFFFFF
+    component "ClientRepository\n<<interface>>" as IClientRepo #FFFFFF
+    component "EmployeeRepository\n<<interface>>" as IEmployeeRepo #FFFFFF
+    component "QuoteRepository\n<<interface>>" as IQuoteRepo #FFFFFF
+  }
+
+  package "Capa de Infraestructura / Persistencia y Servicios" #F4D7E7 {
+    component "PrismaAuthRepository\n<<repository>>" as PrismaAuth #FFFFFF
+    component "PrismaClientRepository\n<<repository>>" as PrismaClient #FFFFFF
+    component "PrismaEmployeeRepository\n<<repository>>" as PrismaEmployee #FFFFFF
+    component "PrismaQuoteRepository\n<<repository>>" as PrismaQuote #FFFFFF
+
+    component "JwtService" as JwtService #FFFFFF
+    component "PasswordHasher\nbcryptjs" as PasswordHasher #FFFFFF
+    component "PdfQuoteService\nPDFKit" as PdfService #FFFFFF
+    component "WhatsAppGateway\n<<adapter/gateway>>" as WhatsAppGateway #FFFFFF
+  }
+}
+
+'========================
+' BASE DE DATOS Y EXTERNOS
+'========================
+database "PostgreSQL\nfastkote_db\n\nTablas principales:\n- users\n- employees\n- roles\n- employee_roles\n- clients\n- catalog_packages\n- catalog_items\n- quotes\n- quote_items\n- event_reservations" as DB #a0ffec
+
+artifact "PDF de Cotización\nGenerado con PDFKit" as PDF #FFFFFF
+
+cloud "Servicio externo\nWhatsApp" as WhatsApp #FFFFFF
+
+'========================
+' RELACIÓN ACTORES - FRONTEND
+'========================
+Admin --> Landing : accede
+Empleado --> Landing : accede
+Staff --> Landing : accede
+
+Landing --> Login : iniciar sesión
+Login --> AuthContext : autenticar usuario
+
+Admin --> EmployeesPage : administra empleados y roles
+Admin --> ClientsPage : gestiona clientes
+Admin --> QuotesPage : gestiona cotizaciones
+Admin --> CalendarPage : consulta calendario
+
+Empleado --> ClientsPage : gestiona clientes
+Empleado --> QuotesPage : genera cotizaciones
+Empleado --> CalendarPage : consulta agenda
+
+Staff --> CalendarPage : consulta eventos aceptados
+Cliente <-- WhatsApp : recibe cotización PDF
+
+'========================
+' FRONTEND INTERNO
+'========================
+AuthContext --> Layout : usuario + roles
+Layout --> Dashboard
+Layout --> ClientsPage
+Layout --> QuotesPage
+Layout --> CalendarPage
+Layout --> EmployeesPage : solo rol Admin
+
+ClientsPage --> ApiFrontend : consume /clients
+EmployeesPage --> ApiFrontend : consume /employees y /roles
+QuotesPage --> ApiFrontend : consume /quotes y /catalog/packages
+CalendarPage --> ApiFrontend : consume /calendar
+Login --> ApiFrontend : consume /auth/login
+
+'========================
+' FRONTEND -> BACKEND
+'========================
+ApiFrontend --> Server : HTTP/JSON\nfetch + JWT
+
+Server --> AuthController : /api/auth
+Server --> ClientsController : /api/clients
+Server --> EmployeesController : /api/employees
+Server --> RolesController : /api/roles
+Server --> QuotesController : /api/quotes
+Server --> CalendarController : /api/calendar
+Server --> CatalogController : /api/catalog
+
+ClientsController --> AuthMiddleware : validar token y rol
+EmployeesController --> AuthMiddleware : solo Admin
+RolesController --> AuthMiddleware : solo Admin
+QuotesController --> AuthMiddleware : Admin / Empleado
+CalendarController --> AuthMiddleware : usuario autenticado
+CatalogController --> AuthMiddleware : usuario autenticado
+
+'========================
+' CONTROLADORES -> MEDIATOR
+'========================
+AuthController --> Mediator : auth.login
+
+ClientsController --> Mediator : clients.list\nclients.get\nclients.create\nclients.update
+
+EmployeesController --> Mediator : employees.list\nemployees.create\nemployees.update\nemployees.deactivate\nemployees.assignRoles
+
+RolesController --> Mediator : roles.list
+
+QuotesController --> Mediator : quotes.list\nquotes.create\nquotes.update\nquotes.updateStatus\nquotes.pdf\nquotes.sendWhatsapp
+
+CalendarController --> Mediator : calendar.list
+CatalogController --> Mediator : catalog.packages
+
+'========================
+' MEDIATOR -> HANDLERS
+'========================
+Mediator --> HLogin
+Mediator --> HClients
+Mediator --> HEmployees
+Mediator --> HQuotes
+Mediator --> HCalendar
+Mediator --> HPackages
+
+'========================
+' HANDLERS -> STRATEGIES / SERVICES
+'========================
+HLogin --> PasswordHasher : valida contraseña
+HLogin --> JwtService : genera token JWT
+
+HQuotes --> PricingStrategy : calcula subtotal,\nimpuestos, descuento y total
+HQuotes --> StatusStrategy : cambia estado y\nbloquea/libera agenda
+HQuotes --> PdfService : generar PDF
+HQuotes --> WhatsAppGateway : enviar cotización
+
+'========================
+' HANDLERS -> DOMINIO
+'========================
+HLogin --> IAuthRepo
+HClients --> IClientRepo
+HEmployees --> IEmployeeRepo
+HQuotes --> IQuoteRepo
+HCalendar --> IQuoteRepo
+HPackages --> IQuoteRepo
+
+'========================
+' DOMINIO -> INFRAESTRUCTURA
+'========================
+IAuthRepo <|.. PrismaAuth
+IClientRepo <|.. PrismaClient
+IEmployeeRepo <|.. PrismaEmployee
+IQuoteRepo <|.. PrismaQuote
+
+'========================
+' INFRAESTRUCTURA -> DATOS / EXTERNOS
+'========================
+PrismaAuth --> DB : consultas usuarios,\nempleados y roles
+PrismaClient --> DB : CRUD clientes
+PrismaEmployee --> DB : CRUD empleados,\nroles y baja lógica
+PrismaQuote --> DB : cotizaciones,\nítems, paquetes y reservas
+
+PdfService --> PDF : construye documento
+WhatsAppGateway --> WhatsApp : envía o simula envío
+WhatsApp --> Cliente : entrega PDF
+
+'========================
+' NOTAS
+'========================
+note bottom of QuotesPage
+Responsabilidad:
+- Listar y filtrar cotizaciones
+- Crear cotización con wizard
+- Cambiar estado
+- Descargar PDF
+- Enviar por WhatsApp
+
+Cubre RF-02 y CU-SGC-L1-11,
+L1-13, L1-15, L1-18 y L1-19.
+end note
+
+note bottom of Mediator
+Patrón Mediator:
+los controladores no llaman
+directamente a los casos de uso.
+Envían comandos/consultas al
+Mediator y este ejecuta el Handler.
+end note
+
+note bottom of PricingStrategy
+Patrón Strategy:
+permite cambiar el cálculo
+de cotización según el tipo:
+precio fijo, por niño/persona
+o cotización personalizada.
+end note
+
+note bottom of StatusStrategy
+Patrón Strategy:
+controla el cambio de estado.
+Al aceptar una cotización,
+se bloquea la fecha en agenda.
+Al rechazar o vencer,
+se libera la reserva.
+end note
+
+note bottom of WhatsAppGateway
+WhatsAppGateway funciona como
+adaptador/gateway externo.
+
+Si existen variables de API,
+intenta enviar por proveedor.
+Si no, devuelve simulación
+controlada para el flujo académico.
+end note
+
+note right of DB
+Persistencia relacional con Prisma ORM.
+
+La implementación actual incluye:
+usuarios, empleados, roles, clientes,
+paquetes de catálogo, cotizaciones,
+ítems y reservas de calendario.
+end note
+
+note bottom of HPackages
+RF-04 implementado parcialmente:
+el sistema consulta paquetes activos
+para crear cotizaciones.
+
+No se observa CRUD completo de
+paquetes, servicios/productos,
+insumos ni promociones en esta
+versión del código.
+end note
+
+legend right
+|= Color |= Significado |
+|<#D9EAF7>| Capa de Presentación / Frontera |
+|<#D7E8FF>| Interfaces HTTP / Controladores |
+|<#A8FFA1>| Capa de Aplicación / Casos de Uso |
+|<#FFF2CC>| Dominio / Contratos |
+|<#F4D7E7>| Infraestructura / Repositorios y servicios |
+|<#a0ffec>| Base de datos relacional |
+|<#FCBA62>| Nota explicativa |
+endlegend
+
+@enduml

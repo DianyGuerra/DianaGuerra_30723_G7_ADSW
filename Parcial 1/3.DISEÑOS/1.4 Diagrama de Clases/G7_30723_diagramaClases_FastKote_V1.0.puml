@@ -1,0 +1,687 @@
+@startuml FastKote_Diagrama_Clases_Implementado
+title Diagrama de Clases - FastKote\nBackend TypeScript + Prisma + Mediator + Strategy
+
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam packageStyle rectangle
+skinparam linetype ortho
+
+left to right direction
+
+'========================
+' ENUMS PRISMA
+'========================
+package "Enums Prisma" #FDEBD0 {
+
+  enum EmployeeStatus {
+    ACTIVE
+    INACTIVE
+  }
+
+  enum ClientStatus {
+    ACTIVE
+    INACTIVE
+  }
+
+  enum ClientType {
+    NATURAL
+    JURIDICAL
+  }
+
+  enum QuoteStatus {
+    DRAFT
+    SENT
+    ACCEPTED
+    REJECTED
+    EXPIRED
+  }
+
+  enum ReservationStatus {
+    BLOCKED
+    RELEASED
+  }
+}
+
+'========================
+' ENTIDADES / MODELOS PRISMA
+'========================
+package "Modelo de Datos / Entidades Prisma" #FFF2CC {
+
+  class Employee <<entity>> {
+    +id: String
+    +identification: String
+    +firstName: String
+    +lastName: String
+    +email: String
+    +phone: String?
+    +address: String?
+    +position: String?
+    +status: EmployeeStatus
+    +createdAt: DateTime
+    +updatedAt: DateTime
+  }
+
+  class User <<entity>> {
+    +id: String
+    +username: String
+    +passwordHash: String
+    +failedAttempts: Int
+    +lockedUntil: DateTime?
+    +isActive: Boolean
+    +employeeId: String?
+    +createdAt: DateTime
+    +updatedAt: DateTime
+  }
+
+  class Role <<entity>> {
+    +id: String
+    +name: String
+    +description: String?
+  }
+
+  class EmployeeRole <<entity>> {
+    +employeeId: String
+    +roleId: String
+  }
+
+  class Client <<entity>> {
+    +id: String
+    +type: ClientType
+    +fullName: String
+    +identification: String
+    +email: String
+    +phone: String
+    +address: String
+    +status: ClientStatus
+    +privacyConsent: Boolean
+    +createdById: String?
+    +createdAt: DateTime
+    +updatedAt: DateTime
+  }
+
+  class CatalogPackage <<entity>> {
+    +id: String
+    +name: String
+    +eventTypes: String[]
+    +basePrice: Decimal?
+    +pricePerChild: Decimal?
+    +minChildren: Int?
+    +capacityMax: Int?
+    +active: Boolean
+  }
+
+  class CatalogItem <<entity>> {
+    +id: String
+    +packageId: String?
+    +name: String
+    +category: String?
+    +unit: String?
+    +basePrice: Decimal
+  }
+
+  class Quote <<entity>> {
+    +id: String
+    +code: String
+    +clientId: String
+    +eventDate: DateTime
+    +eventType: String
+    +status: QuoteStatus
+    +version: Int
+    +subtotal: Decimal
+    +tax: Decimal
+    +discount: Decimal
+    +total: Decimal
+    +validUntil: DateTime
+    +notes: String?
+    +createdById: String?
+    +createdAt: DateTime
+    +updatedAt: DateTime
+  }
+
+  class QuoteItem <<entity>> {
+    +id: String
+    +quoteId: String
+    +description: String
+    +category: String?
+    +quantity: Int
+    +unitPrice: Decimal
+    +subtotal: Decimal
+  }
+
+  class EventReservation <<entity>> {
+    +id: String
+    +quoteId: String
+    +eventDate: DateTime
+    +status: ReservationStatus
+    +reason: String?
+    +createdAt: DateTime
+  }
+}
+
+'========================
+' RELACIONES ENTRE ENTIDADES
+'========================
+Employee "1" o-- "0..1" User : cuenta de acceso
+Employee "1" -- "0..*" EmployeeRole
+Role "1" -- "0..*" EmployeeRole
+
+Employee "0..1" -- "0..*" Client : createdBy
+Employee "0..1" -- "0..*" Quote : createdBy
+
+Client "1" -- "0..*" Quote
+CatalogPackage "0..1" -- "0..*" CatalogItem
+Quote "1" *-- "1..*" QuoteItem
+Quote "1" o-- "0..1" EventReservation
+
+EmployeeStatus <-- Employee
+ClientStatus <-- Client
+ClientType <-- Client
+QuoteStatus <-- Quote
+ReservationStatus <-- EventReservation
+
+'========================
+' MEDIATOR
+'========================
+package "Capa de Aplicación / Mediator" #D6EAF8 {
+
+  interface RequestHandler<TRequest, TResponse> <<interface>> {
+    +handle(request: TRequest): Promise<TResponse>
+  }
+
+  class Mediator <<Mediator>> {
+    -handlers: Map<String, RequestHandler>
+    +register(key: String, handler: RequestHandler): void
+    +send(key: String, request?: unknown): Promise<TResponse>
+  }
+}
+
+Mediator o-- RequestHandler : registra / ejecuta
+
+'========================
+' REPOSITORIOS DE DOMINIO
+'========================
+package "Dominio / Interfaces de Repositorio" #E8DAEF {
+
+  interface AuthRepository <<interface>> {
+    +findByUsername(username: String): Promise<AuthUserRecord?>
+    +registerFailedAttempt(userId: String, failedAttempts: number, lockedUntil?: Date?): Promise<void>
+    +clearFailedAttempts(userId: String): Promise<void>
+  }
+
+  interface ClientRepository <<interface>> {
+    +list(filters: ClientFilters): Promise<unknown[]>
+    +findById(id: String): Promise<unknown?>
+    +create(data: Record<String, unknown>): Promise<unknown>
+    +update(id: String, data: Record<String, unknown>): Promise<unknown>
+  }
+
+  interface EmployeeRepository <<interface>> {
+    +list(filters: EmployeeFilters): Promise<unknown[]>
+    +findById(id: String): Promise<unknown?>
+    +create(data: Record<String, unknown>): Promise<unknown>
+    +update(id: String, data: Record<String, unknown>): Promise<unknown>
+    +deactivate(id: String): Promise<unknown>
+    +assignRoles(employeeId: String, roleIds: String[]): Promise<unknown>
+    +listRoles(): Promise<unknown[]>
+  }
+
+  interface QuoteRepository <<interface>> {
+    +list(filters: QuoteFilters): Promise<unknown[]>
+    +findById(id: String): Promise<any?>
+    +create(data: any): Promise<unknown>
+    +updateDraft(id: String, data: any): Promise<unknown>
+    +updateStatus(id: String, status: String): Promise<unknown>
+    +createOrBlockReservation(quoteId: String, eventDate: Date, reason: String): Promise<void>
+    +releaseReservation(quoteId: String, reason: String): Promise<void>
+    +listCalendar(): Promise<unknown[]>
+    +listPackages(): Promise<unknown[]>
+    +getPackageById(id: String): Promise<any?>
+  }
+}
+
+'========================
+' SERVICIOS DE INFRAESTRUCTURA
+'========================
+package "Infraestructura / Servicios" #FADBD8 {
+
+  class JwtService {
+    +sign(payload: JwtPayload): String
+    +verify(token: String): JwtPayload
+  }
+
+  class PasswordHasher {
+    +hash(password: String): Promise<String>
+    +compare(password: String, storedHash: String): Promise<Boolean>
+  }
+
+  class PdfQuoteService {
+    +buildQuotePdf(quote: any): Promise<Buffer>
+  }
+
+  class WhatsAppGateway <<gateway>> {
+    +sendQuoteMessage(input: WhatsAppInput): Promise<unknown>
+  }
+}
+
+'========================
+' IMPLEMENTACIONES PRISMA
+'========================
+package "Infraestructura / Repositorios Prisma" #F4D7E7 {
+
+  class PrismaAuthRepository <<repository>> {
+    +findByUsername(username: String)
+    +registerFailedAttempt(userId: String, failedAttempts: number, lockedUntil?: Date?): Promise<void>
+    +clearFailedAttempts(userId: String): Promise<void>
+  }
+
+  class PrismaClientRepository <<repository>> {
+    +list(filters: ClientFilters)
+    +findById(id: String)
+    +create(data: Record<String, unknown>)
+    +update(id: String, data: Record<String, unknown>)
+  }
+
+  class PrismaEmployeeRepository <<repository>> {
+    +list(filters: EmployeeFilters)
+    +findById(id: String)
+    +create(data: Record<String, unknown>)
+    +update(id: String, data: Record<String, unknown>)
+    +deactivate(id: String)
+    +assignRoles(employeeId: String, roleIds: String[])
+    +listRoles()
+  }
+
+  class PrismaQuoteRepository <<repository>> {
+    +list(filters: QuoteFilters)
+    +findById(id: String)
+    +create(data: any)
+    +updateDraft(id: String, data: any)
+    +updateStatus(id: String, status: String)
+    +createOrBlockReservation(quoteId: String, eventDate: Date, reason: String)
+    +releaseReservation(quoteId: String, reason: String)
+    +listCalendar()
+    +listPackages()
+    +getPackageById(id: String)
+  }
+}
+
+AuthRepository <|.. PrismaAuthRepository
+ClientRepository <|.. PrismaClientRepository
+EmployeeRepository <|.. PrismaEmployeeRepository
+QuoteRepository <|.. PrismaQuoteRepository
+
+PrismaAuthRepository ..> User
+PrismaAuthRepository ..> Employee
+PrismaAuthRepository ..> Role
+
+PrismaClientRepository ..> Client
+PrismaEmployeeRepository ..> Employee
+PrismaEmployeeRepository ..> User
+PrismaEmployeeRepository ..> Role
+PrismaEmployeeRepository ..> EmployeeRole
+
+PrismaQuoteRepository ..> Quote
+PrismaQuoteRepository ..> QuoteItem
+PrismaQuoteRepository ..> Client
+PrismaQuoteRepository ..> CatalogPackage
+PrismaQuoteRepository ..> CatalogItem
+PrismaQuoteRepository ..> EventReservation
+
+'========================
+' HANDLERS AUTH
+'========================
+package "Aplicación / Auth" #D5F5E3 {
+
+  class LoginUserHandler <<control>> {
+    -authRepository: AuthRepository
+    -passwordHasher: PasswordHasher
+    -jwtService: JwtService
+    +handle(input: unknown): Promise<unknown>
+  }
+}
+
+RequestHandler <|.. LoginUserHandler
+LoginUserHandler --> AuthRepository
+LoginUserHandler --> PasswordHasher
+LoginUserHandler --> JwtService
+Mediator --> LoginUserHandler : auth.login
+
+'========================
+' HANDLERS CLIENTES
+'========================
+package "Aplicación / Clientes" #D5F5E3 {
+
+  class ListClientsHandler <<control>> {
+    -repository: ClientRepository
+    +handle(input: unknown): Promise<unknown[]>
+  }
+
+  class GetClientHandler <<control>> {
+    -repository: ClientRepository
+    +handle(input: unknown): Promise<unknown>
+  }
+
+  class CreateClientHandler <<control>> {
+    -repository: ClientRepository
+    +handle(input: unknown): Promise<unknown>
+  }
+
+  class UpdateClientHandler <<control>> {
+    -repository: ClientRepository
+    +handle(input: unknown): Promise<unknown>
+  }
+}
+
+RequestHandler <|.. ListClientsHandler
+RequestHandler <|.. GetClientHandler
+RequestHandler <|.. CreateClientHandler
+RequestHandler <|.. UpdateClientHandler
+
+ListClientsHandler --> ClientRepository
+GetClientHandler --> ClientRepository
+CreateClientHandler --> ClientRepository
+UpdateClientHandler --> ClientRepository
+
+Mediator --> ListClientsHandler : clients.list
+Mediator --> GetClientHandler : clients.get
+Mediator --> CreateClientHandler : clients.create
+Mediator --> UpdateClientHandler : clients.update
+
+'========================
+' HANDLERS EMPLEADOS / ROLES
+'========================
+package "Aplicación / Empleados y Roles" #D5F5E3 {
+
+  class ListEmployeesHandler <<control>> {
+    -repository: EmployeeRepository
+    +handle(input: unknown): Promise<unknown[]>
+  }
+
+  class CreateEmployeeHandler <<control>> {
+    -repository: EmployeeRepository
+    -passwordHasher: PasswordHasher
+    +handle(input: unknown): Promise<unknown>
+  }
+
+  class UpdateEmployeeHandler <<control>> {
+    -repository: EmployeeRepository
+    +handle(input: unknown): Promise<unknown>
+  }
+
+  class DeactivateEmployeeHandler <<control>> {
+    -repository: EmployeeRepository
+    +handle(input: unknown): Promise<unknown>
+  }
+
+  class AssignRolesHandler <<control>> {
+    -repository: EmployeeRepository
+    +handle(input: unknown): Promise<unknown>
+  }
+
+  class ListRolesHandler <<control>> {
+    -repository: EmployeeRepository
+    +handle(): Promise<unknown[]>
+  }
+}
+
+RequestHandler <|.. ListEmployeesHandler
+RequestHandler <|.. CreateEmployeeHandler
+RequestHandler <|.. UpdateEmployeeHandler
+RequestHandler <|.. DeactivateEmployeeHandler
+RequestHandler <|.. AssignRolesHandler
+RequestHandler <|.. ListRolesHandler
+
+ListEmployeesHandler --> EmployeeRepository
+CreateEmployeeHandler --> EmployeeRepository
+CreateEmployeeHandler --> PasswordHasher
+UpdateEmployeeHandler --> EmployeeRepository
+DeactivateEmployeeHandler --> EmployeeRepository
+AssignRolesHandler --> EmployeeRepository
+ListRolesHandler --> EmployeeRepository
+
+Mediator --> ListEmployeesHandler : employees.list
+Mediator --> CreateEmployeeHandler : employees.create
+Mediator --> UpdateEmployeeHandler : employees.update
+Mediator --> DeactivateEmployeeHandler : employees.deactivate
+Mediator --> AssignRolesHandler : employees.assignRoles
+Mediator --> ListRolesHandler : roles.list
+
+'========================
+' STRATEGY DE CÁLCULO
+'========================
+package "Aplicación / Strategy de Cálculo de Cotización" #FCF3CF {
+
+  interface PricingStrategy <<interface>> {
+    +supports(input: PricingInput): boolean
+    +calculate(input: PricingInput): PricingResult
+  }
+
+  class PricingContext <<context>> {
+    -strategies: PricingStrategy[]
+    +calculate(input: PricingInput): PricingResult
+  }
+
+  class CustomPricingStrategy <<strategy>> {
+    +supports(input: PricingInput): boolean
+    +calculate(input: PricingInput): PricingResult
+  }
+
+  class PerChildPricingStrategy <<strategy>> {
+    +supports(input: PricingInput): boolean
+    +calculate(input: PricingInput): PricingResult
+  }
+
+  class FixedPackagePricingStrategy <<strategy>> {
+    +supports(input: PricingInput): boolean
+    +calculate(input: PricingInput): PricingResult
+  }
+}
+
+PricingStrategy <|.. CustomPricingStrategy
+PricingStrategy <|.. PerChildPricingStrategy
+PricingStrategy <|.. FixedPackagePricingStrategy
+PricingContext o-- PricingStrategy
+
+'========================
+' STRATEGY DE ESTADO
+'========================
+package "Aplicación / Strategy de Estado de Cotización" #FCF3CF {
+
+  interface QuoteStatusStrategy <<interface>> {
+    +supports(status: String): boolean
+    +apply(repository: QuoteRepository, quote: any): Promise<void>
+  }
+
+  class QuoteStatusContext <<context>> {
+    -strategies: QuoteStatusStrategy[]
+    +apply(repository: QuoteRepository, quote: any): Promise<void>
+  }
+
+  class AcceptQuoteStatusStrategy <<strategy>> {
+    +supports(status: String): boolean
+    +apply(repository: QuoteRepository, quote: any): Promise<void>
+  }
+
+  class ReleaseQuoteStatusStrategy <<strategy>> {
+    +supports(status: String): boolean
+    +apply(repository: QuoteRepository, quote: any): Promise<void>
+  }
+
+  class DraftOrSentStatusStrategy <<strategy>> {
+    +supports(status: String): boolean
+    +apply(repository: QuoteRepository, quote: any): Promise<void>
+  }
+}
+
+QuoteStatusStrategy <|.. AcceptQuoteStatusStrategy
+QuoteStatusStrategy <|.. ReleaseQuoteStatusStrategy
+QuoteStatusStrategy <|.. DraftOrSentStatusStrategy
+QuoteStatusContext o-- QuoteStatusStrategy
+
+AcceptQuoteStatusStrategy --> QuoteRepository : bloquea reserva
+ReleaseQuoteStatusStrategy --> QuoteRepository : libera reserva
+DraftOrSentStatusStrategy --> QuoteRepository : no bloquea agenda
+
+'========================
+' HANDLERS COTIZACIONES
+'========================
+package "Aplicación / Cotizaciones y Calendario" #D5F5E3 {
+
+  class ListQuotesHandler <<control>> {
+    -repository: QuoteRepository
+    +handle(input: unknown): Promise<unknown[]>
+  }
+
+  class CreateQuoteHandler <<control>> {
+    -repository: QuoteRepository
+    -pricingContext: PricingContext
+    +handle(input: unknown): Promise<unknown>
+  }
+
+  class UpdateQuoteHandler <<control>> {
+    -repository: QuoteRepository
+    -pricingContext: PricingContext
+    +handle(input: unknown): Promise<unknown>
+  }
+
+  class UpdateQuoteStatusHandler <<control>> {
+    -repository: QuoteRepository
+    -statusContext: QuoteStatusContext
+    +handle(input: unknown): Promise<unknown>
+  }
+
+  class GenerateQuotePdfHandler <<control>> {
+    -repository: QuoteRepository
+    -pdfService: PdfQuoteService
+    +handle(input: unknown): Promise<Buffer>
+  }
+
+  class SendQuoteWhatsAppHandler <<control>> {
+    -repository: QuoteRepository
+    -pdfService: PdfQuoteService
+    -gateway: WhatsAppGateway
+    +handle(input: unknown): Promise<unknown>
+  }
+
+  class ListCalendarHandler <<control>> {
+    -repository: QuoteRepository
+    +handle(): Promise<unknown[]>
+  }
+
+  class ListPackagesHandler <<control>> {
+    -repository: QuoteRepository
+    +handle(): Promise<unknown[]>
+  }
+}
+
+RequestHandler <|.. ListQuotesHandler
+RequestHandler <|.. CreateQuoteHandler
+RequestHandler <|.. UpdateQuoteHandler
+RequestHandler <|.. UpdateQuoteStatusHandler
+RequestHandler <|.. GenerateQuotePdfHandler
+RequestHandler <|.. SendQuoteWhatsAppHandler
+RequestHandler <|.. ListCalendarHandler
+RequestHandler <|.. ListPackagesHandler
+
+ListQuotesHandler --> QuoteRepository
+CreateQuoteHandler --> QuoteRepository
+CreateQuoteHandler --> PricingContext
+UpdateQuoteHandler --> QuoteRepository
+UpdateQuoteHandler --> PricingContext
+UpdateQuoteStatusHandler --> QuoteRepository
+UpdateQuoteStatusHandler --> QuoteStatusContext
+GenerateQuotePdfHandler --> QuoteRepository
+GenerateQuotePdfHandler --> PdfQuoteService
+SendQuoteWhatsAppHandler --> QuoteRepository
+SendQuoteWhatsAppHandler --> PdfQuoteService
+SendQuoteWhatsAppHandler --> WhatsAppGateway
+ListCalendarHandler --> QuoteRepository
+ListPackagesHandler --> QuoteRepository
+
+Mediator --> ListQuotesHandler : quotes.list
+Mediator --> CreateQuoteHandler : quotes.create
+Mediator --> UpdateQuoteHandler : quotes.update
+Mediator --> UpdateQuoteStatusHandler : quotes.updateStatus
+Mediator --> GenerateQuotePdfHandler : quotes.pdf
+Mediator --> SendQuoteWhatsAppHandler : quotes.sendWhatsapp
+Mediator --> ListCalendarHandler : calendar.list
+Mediator --> ListPackagesHandler : catalog.packages
+
+'========================
+' NOTAS DE TRAZABILIDAD
+'========================
+note bottom of LoginUserHandler
+RF-01 / CU-SGC-L0-01
+Autenticar Usuario.
+
+Implementa validación de credenciales,
+bloqueo por intentos fallidos,
+JWT y roles del empleado.
+end note
+
+note bottom of CreateQuoteHandler
+RF-02 / CU-SGC-L1-11
+Generar Cotización.
+
+Usa PricingContext para calcular
+subtotal, impuesto, descuento y total.
+Crea cotización en estado DRAFT.
+end note
+
+note bottom of UpdateQuoteHandler
+CU-SGC-L1-13
+Editar Cotización.
+
+En la implementación actual solo permite
+editar cotizaciones en estado DRAFT.
+Incrementa version y reemplaza ítems.
+end note
+
+note bottom of UpdateQuoteStatusHandler
+CU-SGC-L1-15
+Actualizar Estado Cotización.
+
+Usa QuoteStatusContext:
+ACCEPTED bloquea fecha.
+REJECTED / EXPIRED libera fecha.
+DRAFT / SENT no bloquean agenda.
+end note
+
+note bottom of GenerateQuotePdfHandler
+CU-SGC-L1-18
+Generar PDF de Cotización.
+
+Usa PdfQuoteService con PDFKit.
+end note
+
+note bottom of SendQuoteWhatsAppHandler
+CU-SGC-L1-19
+Enviar Cotización por WhatsApp.
+
+Genera PDF y usa WhatsAppGateway.
+El gateway puede enviar por API externa
+o simular el envío según configuración.
+end note
+
+note right of CatalogPackage
+RF-04 parcial.
+
+En el código actual los paquetes
+se consultan para crear cotizaciones.
+No se modela CRUD completo de paquetes,
+insumos, servicios/productos ni promociones.
+end note
+
+legend right
+|= Estereotipo |= Significado |
+|<<entity>>| Modelo persistido por Prisma/PostgreSQL |
+|<<control>>| Handler de caso de uso |
+|<<repository>>| Implementación de persistencia |
+|<<interface>>| Contrato de dominio |
+|<<Mediator>>| Patrón Mediator |
+|<<strategy>>| Variante de Strategy |
+|<<gateway>>| Adaptador/puerta externa |
+endlegend
+
+@enduml
